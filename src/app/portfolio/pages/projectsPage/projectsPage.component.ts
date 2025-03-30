@@ -36,7 +36,7 @@ export class ProjectsPageComponent implements OnInit {
 
     this.firestoreService.getDocuments().subscribe({
       next: (projects) => {
-        this.projects = projects;
+        this.projects = projects.filter((t) => t.state === true);
       },
       error: (error) => {
         console.error('Error loading projects:', error);

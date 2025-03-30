@@ -6,6 +6,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirestoreService } from '../../../firestore/firebase.service';
 import { GlobalDataService } from '../../../firestore/global-data.service';
 import { FileData } from '../../../firestore/storage.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'portfolio-project-page',
@@ -25,6 +26,9 @@ export class ProjectPageComponent implements OnInit {
     client: '',
     technologies: [],
     views: [],
+    state: false,
+    creationDate: Timestamp.now(),
+    completedProfile: false
   };
   private firestoreService: FirestoreService<Project>;
   public currentIndex: number = 0;

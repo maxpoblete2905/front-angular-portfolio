@@ -1,6 +1,9 @@
 import { View } from './view';
+import { Timestamp } from '@angular/fire/firestore'; // o 'firebase/firestore'
 
 export interface Project {
+  state: boolean;
+  creationDate: Timestamp;
   id?: string;
   title: string;
   description: string;
@@ -10,4 +13,5 @@ export interface Project {
   client: string;
   technologies: string[];
   views: View[];
+  completedProfile: boolean
 }

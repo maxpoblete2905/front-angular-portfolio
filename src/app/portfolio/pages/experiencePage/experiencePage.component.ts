@@ -16,7 +16,8 @@ export class ExperiencePageComponent implements OnInit {
     description: '',
     name: '',
     university_title: '',
-    update: ''
+    update: '',
+    descriptionPosition: ''
   }
 
   constructor(

@@ -2,12 +2,7 @@ import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirestoreService } from '../../../firestore/firebase.service';
-
-interface Contact {
-  name: string
-  email: string
-  message: string
-}
+import { Contact } from '../../interfaces';
 
 @Component({
   selector: 'portfolio-contact-page',
@@ -65,12 +60,12 @@ export class ContactPageComponent {
     const errors = this.contactForm.controls[field].errors || {};
     for (const key of Object.keys(errors)) {
       switch (key) {
-      case 'required':
-        return 'Este campo es requerido';
-      case 'minlength':
-        return `Minimo ${errors['minlength'].requiredLength} caracters.`;
-      case 'min':
-        return 'el valor minimo es 0';
+        case 'required':
+          return 'Este campo es requerido';
+        case 'minlength':
+          return `Minimo ${errors['minlength'].requiredLength} caracters.`;
+        case 'min':
+          return 'el valor minimo es 0';
       }
     }
     return null;

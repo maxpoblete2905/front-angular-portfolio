@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HeadComponent } from './components/head/head.component';
-import { DescriptionsComponent } from './components/descriptions/descriptions.component';
-import { TitleComponent } from './components/title/title.component';
-import { SocialNetworksComponent } from './components/socialNetworks/socialNetworks.component';
-import { ImageviewerComponent } from './components/imageviewer/imageviewer.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from './components/input/input.component';
 import { ContactInformationComponent } from './components/contactInformation/contactInformation.component';
@@ -13,11 +8,6 @@ import { DownloadCvComponent } from './components/download-cv/download-cv.compon
 
 @NgModule({
   declarations: [
-    HeadComponent,
-    DescriptionsComponent,
-    TitleComponent,
-    SocialNetworksComponent,
-    ImageviewerComponent,
     InputComponent,
     ContactInformationComponent,
     DownloadCvComponent,
@@ -28,13 +18,9 @@ import { DownloadCvComponent } from './components/download-cv/download-cv.compon
     ReactiveFormsModule
   ],
   exports: [
-    HeadComponent,
-    DescriptionsComponent,
-    TitleComponent,
-    SocialNetworksComponent,
-    ImageviewerComponent,
     InputComponent,
-    ContactInformationComponent
+    ContactInformationComponent,
+    DownloadCvComponent
   ]
 })
 export class SharedModule { }
