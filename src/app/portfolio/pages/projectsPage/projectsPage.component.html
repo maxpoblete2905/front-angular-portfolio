@@ -1,41 +1,42 @@
-<shared-head [title]="title" />
+<div class="min-h-screen bg-gray-600 p-4">
+  <div class=" mx-auto">
+    <!-- Grid compacto 2 columnas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div *ngFor="let project of projects"
+        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
 
 
+        <!-- Contenido compacto -->
+        <div class="p-3">
+          <div class="flex justify-between items-center mb-1">
+            <h3 class="text-lg font-semibold mb-1 text-blue-400">{{ project.title }}</h3>
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
 
-<!-- Estilo 1 -->
-<div class="m-3" *ngIf="darkMode">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div *ngFor="let project of projects"
-      class="bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-      <div class="overflow-hidden w-full h-52 border-gray-700 border-2">
-        <img class="w-full h-full object-cover object-center" [src]="project.imageUrl" [alt]="project.title">
-      </div>
-      <div class="p-3">
-        <h3 class="text-lg font-semibold text-white mb-1">{{ project.title.toUpperCase() }}</h3>
-        <p class="text-gray-400 mb-2">{{ project.companyName.toUpperCase() }}</p>
-        <a [routerLink]="['/portfolio/project/', project.id ]" class="text-blue-400 font-semibold hover:text-blue-600">
-          Ver más
-        </a>
+          <p class="text-gray-300 text-xs mb-2 line-clamp-2">{{ project.companyName }}</p>
+
+          <a [routerLink]="['/portfolio/project/', project.id]" class="absolute inset-0 z-10 cursor-pointer"
+            aria-label="Ver"></a>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-
-<!-- Estilo 2 -->
-<div class="m-3" *ngIf="!darkMode">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-    <div *ngFor="let project of projects"
-      class="bg-blue-950 rounded-lg shadow-md overflow-hidden transition duration-300 transform hover:scale-105">
-      <div class="overflow-hidden rounded-lg w-full h-52 border-blue-950 border-2">
-        <img class="w-full h-full object-cover object-center" [src]="project.imageUrl" [alt]="project.title">
-      </div>
-      <div class="p-3">
-        <h3 class="text-lg font-semibold mb-1">{{ project.title.toUpperCase() }}</h3>
-        <p class="text-gray-400 mb-2">{{ project.companyName.toUpperCase() }}</p>
-        <a [routerLink]="['/portfolio/project/', project.id ]" class="text-blue-300 font-semibold hover:text-blue-700">
-          Ver más
-        </a>
+    <!-- Empty state compacto -->
+    <div *ngIf="!projects?.length" class="text-center py-8">
+      <div class="inline-block p-4 bg-gray-700 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-white">No hay proyectos</h3>
+        <button routerLink="/projects/new"
+          class="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors">
+          Crear proyecto
+        </button>
       </div>
     </div>
   </div>

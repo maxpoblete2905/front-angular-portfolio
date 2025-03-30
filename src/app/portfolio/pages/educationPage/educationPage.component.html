@@ -1,20 +1,56 @@
-<!-- educationPage.component.html -->
-<shared-head [title]="title" />
+<div class="min-h-screen bg-gray-600 p-4">
+  <div class="mx-auto">
+    <!-- Grid de educación y certificaciones -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Educación -->
+      <div *ngFor="let education of educations"
+        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
 
-<div class="m-3">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <!-- Educación -->
-    <div *ngFor="let education of educations" class="bg-blue-950 p-4 rounded-lg shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg">
-      <h2 class="text-lg font-semibold">{{ education.title }}</h2>
-      <p class="text-white">{{ education.institution }}</p>
-      <p class="text-white">{{ education.startYear }} - {{ education.endYear }}</p>
-      <p>{{ education.description }}</p>
+        <div class="p-3">
+          <div class="flex justify-between items-start mb-1">
+            <h3 class="text-lg font-semibold text-blue-400">{{ education.title }}</h3>
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+
+          <p class="text-gray-300 text-xs mb-1">{{ education.institution }}</p>
+          <p class="text-gray-400 text-xs mb-2">{{ education.startYear }} - {{ education.endYear }}</p>
+          <p class="text-gray-300 text-xs line-clamp-2">{{ education.description }}</p>
+        </div>
+      </div>
+
+      <!-- Certificaciones -->
+      <div *ngFor="let certification of certifications"
+        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
+
+        <div class="p-3">
+          <div class="flex justify-between items-start mb-1">
+            <h3 class="text-lg font-semibold text-blue-400">{{ certification.name }}</h3>
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+
+          <p class="text-gray-400 text-xs">{{ certification.year }}</p>
+          <p *ngIf="certification.name" class="text-gray-300 text-xs mt-1">{{ certification.year }}</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Certificaciones -->
-    <div *ngFor="let certification of certifications" class="bg-blue-950 p-4 rounded-lg shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg">
-      <h2 class="text-lg font-semibold">{{ certification.name }}</h2>
-      <p class="text-white">{{ certification.year }}</p>
+    <!-- Empty state -->
+    <div *ngIf="!educations?.length && !certifications?.length" class="text-center py-8">
+      <div class="inline-block p-4 bg-gray-700 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-white">No hay registros educativos</h3>
+      </div>
     </div>
   </div>
 </div>

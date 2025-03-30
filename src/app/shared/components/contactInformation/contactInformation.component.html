@@ -1,8 +1,22 @@
-<div class="bg-blue-950 shadow-lg rounded-lg p-6 mb-5">
-  <h2 class="text-xl font-semibold mb-4">Información de Contacto</h2>
-  <div *ngFor="let personal of personalInformation" class="flex items-center mb-4 cursor-pointer"
-    (click)="realizarAccion(personal.label, personal.value)">
-    <img [src]="personal.icon" alt="" class="h-8 w-8 mr-5" />
-    <span>{{ personal.value }} </span>
+<div class="bg-gray-700 rounded-lg overflow-hidden transition-all duration-200 group relative">
+  <div class="p-4">
+    <div class="flex justify-between items-center mb-3">
+      <h2 class="text-lg font-semibold text-blue-400">Información de Contacto</h2>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors"
+        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </div>
+
+    <div class="space-y-3">
+      <div *ngFor="let personal of personalInformation"
+        class="flex items-center p-2 rounded hover:bg-gray-600 transition-colors cursor-pointer"
+        (click)="realizarAccion(personal.label, personal.value)">
+        <div class="h-8 w-8 mr-3 bg-gray-600 p-1.5 rounded-lg flex items-center justify-center">
+          <img [src]="personal.icon" alt="" class="h-full w-full object-contain" />
+        </div>
+        <span class="text-sm text-gray-300">{{ personal.value }}</span>
+      </div>
+    </div>
   </div>
 </div>

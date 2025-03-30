@@ -3,6 +3,7 @@ import { DarkMode, Skill } from '../../interfaces';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirestoreService } from '../../../firestore/firebase.service';
 import { GlobalDataService } from '../../../firestore/global-data.service';
+import { FileData } from '../../../firestore/storage.service';
 
 @Component({
   selector: 'portfolio-skills-page',
@@ -14,7 +15,7 @@ export class SkillsPageComponent implements OnInit {
   public title: string = 'Habilidades'
   public skills: Skill[] = [];
   public pathFirestore: string = 'skills'
-  public technologyURL: Record<string, string> = {};
+  public technologyURL: FileData[] = [];
   public darkMode: boolean = true;
 
   constructor(
@@ -28,6 +29,14 @@ export class SkillsPageComponent implements OnInit {
 
   transform(value: string): string {
     return value ? value.split('_').join(' ').toLowerCase() : value.toLowerCase();
+  }
+
+  namefind(name: string): string {
+    const techItem = this.technologyURL.find((item: FileData) => item.name.split('.')[0] === name);
+    if (techItem) {
+      return techItem.url;
+    }
+    return '';
   }
 
   async ngOnInit(): Promise<void> {

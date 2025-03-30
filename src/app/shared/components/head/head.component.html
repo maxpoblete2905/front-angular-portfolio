@@ -1,5 +1,20 @@
-<header class="background-class py-4 m-3 mt-0 rounded-b-xl text-center sticky top-0 z-10">
-  <div class="mx-auto items-center">
-    <p class="text-lg font-semibold text-center">{{ title.toUpperCase() }}</p>
+<header class="bg-gray-700 py-3 px-4 shadow-md sticky top-0 z-10">
+  <div class="mx-auto">
+    <div class="flex justify-between items-center">
+      <!-- Flecha de navegación (opcional) -->
+      <button *ngIf="title" (click)="goBack()" class="text-blue-400 hover:text-blue-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+
+      <!-- Título centrado -->
+      <h1 class="text-lg font-semibold text-blue-400 flex-grow text-center">
+        {{ title.toUpperCase() }}
+      </h1>
+
+      <!-- Espacio balanceado (opcional) -->
+      <div *ngIf="title" class="w-5"></div>
+    </div>
   </div>
 </header>

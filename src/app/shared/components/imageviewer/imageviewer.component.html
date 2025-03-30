@@ -1,24 +1,33 @@
-<div class="flex flex-col items-center w-full rounded-b-lg" *ngIf="images && images.length > 0">
-  <div class="relative w-full overflow-hidden">
-    <img
-      *ngIf="images[currentIndex] && images[currentIndex].src"
-      [src]="images[currentIndex].src"
-      [alt]="images[currentIndex].description"
-      class="w-full min-h-96 max-h-96 object-cover rounded-b-0 shadow-xl"
-    >
-    <div class="absolute inset-0 flex items-center justify-between" *ngIf="images.length > 1">
-      <button
-        (click)="previousImage()"
-        class="p-2 text-white bg-black bg-opacity-50 hover:bg-opacity-75"
-      >
-        &#10094;
+<div class="w-full bg-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200"
+  *ngIf="images && images.length > 0">
+  <div class="relative w-full">
+    <!-- Imagen principal -->
+    <img *ngIf="images[currentIndex] && images[currentIndex].src" [src]="images[currentIndex].src"
+      [alt]="images[currentIndex].description" class="w-full h-96 object-cover">
+
+    <!-- Controles de navegación -->
+    <div class="absolute inset-0 flex items-center justify-between px-2" *ngIf="images.length > 1">
+      <button (click)="previousImage()"
+        class="p-2 text-gray-300 bg-gray-800 bg-opacity-70 hover:bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
       </button>
-      <button
-        (click)="nextImage()"
-        class="p-2 text-white bg-black bg-opacity-50 hover:bg-opacity-75"
-      >
-        &#10095;
+
+      <button (click)="nextImage()"
+        class="p-2 text-gray-300 bg-gray-800 bg-opacity-70 hover:bg-opacity-90 rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
       </button>
+    </div>
+
+    <!-- Indicadores (opcional) -->
+    <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+      <div *ngFor="let image of images; let i = index" class="w-2 h-2 rounded-full transition-all duration-200"
+        [class.bg-blue-400]="i === currentIndex" [class.bg-gray-500]="i !== currentIndex"
+        [class.opacity-90]="i === currentIndex" [class.opacity-50]="i !== currentIndex">
+      </div>
     </div>
   </div>
 </div>

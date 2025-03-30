@@ -1,69 +1,63 @@
-<shared-head [title]="title" />
+<div class="min-h-screen bg-gray-600 p-4">
+  <div class="mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- Card de información de contacto -->
+      <div class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg">
+        <shared-contact-information></shared-contact-information>
+      </div>
 
-<div class="m-3">
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <!-- Card de información de contacto -->
-    <shared-contact-information></shared-contact-information>
-    <!-- Card del formulario de contacto -->
-    <div class="bg-blue-950 shadow-lg rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">Formulario de Contacto</h2>
-      <h2 *ngIf="stateMessage" class="text-green-400 text-lg mb-1">{{ message }}</h2>
-      <form [formGroup]="contactForm" (ngSubmit)="onSave()">
-        <div class="mb-4">
-          <label for="name" class="block text-slate-300 font-bold mb-2"
-            >Nombre</label
-          >
-          <input
-            formControlName="name"
-            type="text"
-            id="name"
-            class="text-black form-input w-full rounded pl-3 focus:outline-none hover:outline-none"
-            placeholder="Nombre"
-            required
-          />
-          <span *ngIf="isValidfield('name')" class="form-text text-danger">
-            {{ getFieldError('name') }}
-          </span>
+      <!-- Card del formulario de contacto -->
+      <div class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg p-4">
+        <div class="p-3">
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="text-lg font-semibold text-blue-400">Formulario de Contacto</h2>
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+
+          <h2 *ngIf="stateMessage" class="text-green-400 text-sm mb-3">{{ message }}</h2>
+
+          <form [formGroup]="contactForm" (ngSubmit)="onSave()">
+            <div class="mb-3">
+              <label for="name" class="block text-gray-300 text-xs font-medium mb-1">Nombre</label>
+              <input formControlName="name" type="text" id="name"
+                class="w-full bg-gray-600 text-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                placeholder="Nombre" required />
+              <span *ngIf="isValidfield('name')" class="text-red-400 text-xs">
+                {{ getFieldError('name') }}
+              </span>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="block text-gray-300 text-xs font-medium mb-1">Correo Electrónico</label>
+              <input formControlName="email" type="email" id="email"
+                class="w-full bg-gray-600 text-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                placeholder="correo@example.com" required />
+              <span *ngIf="isValidfield('email')" class="text-red-400 text-xs">
+                {{ getFieldError('email') }}
+              </span>
+            </div>
+
+            <div class="mb-4">
+              <label for="message" class="block text-gray-300 text-xs font-medium mb-1">Mensaje</label>
+              <textarea formControlName="message" id="message" rows="4"
+                class="w-full bg-gray-600 text-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                placeholder="Escribe tu mensaje aquí" required></textarea>
+              <span *ngIf="isValidfield('message')" class="text-red-400 text-xs">
+                {{ getFieldError('message') }}
+              </span>
+            </div>
+
+            <button type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors">
+              Enviar Mensaje
+            </button>
+          </form>
         </div>
-        <div class="mb-4">
-          <label for="email" class="block text-slate-300 font-bold mb-2"
-            >Correo Electrónico</label
-          >
-          <input
-            formControlName="email"
-            type="email"
-            id="email"
-            class="text-black form-input w-full rounded pl-3 focus:outline-none hover:outline-none"
-            placeholder="correo@example.com"
-            required
-          />
-          <span *ngIf="isValidfield('email')" class="form-text text-danger">
-            {{ getFieldError('email') }}
-          </span>
-        </div>
-        <div class="mb-4">
-          <label for="message" class="block text-slate-300 font-bold mb-2"
-            >Mensaje</label
-          >
-          <textarea
-            formControlName="message"
-            id="message"
-            rows="4"
-            class="text-black form-input w-full rounded pl-3 focus:outline-none hover:outline-none"
-            placeholder="Escribe tu mensaje aquí"
-            required
-          ></textarea>
-          <span *ngIf="isValidfield('message')" class="form-text text-danger">
-            {{ getFieldError('message') }}
-          </span>
-        </div>
-        <button
-          type="submit"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Enviar Mensaje
-        </button>
-      </form>
+      </div>
     </div>
   </div>
 </div>

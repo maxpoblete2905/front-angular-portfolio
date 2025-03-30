@@ -9,4 +9,8 @@ export class HeadComponent {
 
   @Input()
   public title!: string;
+
+  goBack(){
+    
+  }
 }

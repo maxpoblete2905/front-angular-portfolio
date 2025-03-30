@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirestoreService } from '../../../firestore/firebase.service';
-import { IconServicesTsService } from '../../../shared/services/icon.services.ts.service';
 import { GlobalDataService } from '../../../firestore/global-data.service';
+import { FileData } from '../../../firestore/storage.service';
 
 @Component({
   selector: 'portfolio-project-page',
@@ -28,7 +28,7 @@ export class ProjectPageComponent implements OnInit {
   };
   private firestoreService: FirestoreService<Project>;
   public currentIndex: number = 0;
-  public technologyURL: Record<string, string> = {};
+  public technologyURL: FileData[] = [];
   public darkMode: boolean = true;
 
   constructor(
@@ -46,6 +46,15 @@ export class ProjectPageComponent implements OnInit {
 
   transform(value: string): string {
     return value ? value.split('_').join(' ') : value;
+  }
+
+
+  namefind(name: string): string {
+    const techItem = this.technologyURL.find((item: FileData) => item.name.split('.')[0] === name);
+    if (techItem) {
+      return techItem.url;
+    }
+    return '';
   }
 
   ngOnInit(): void {

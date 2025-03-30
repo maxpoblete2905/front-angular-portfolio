@@ -1,6 +1,0 @@
-.imagen {
-  width: 100%; /* Ancho fijo de 200 píxeles */
-  height: 600px; /* Alto fijo de 150 píxeles */
-  object-fit: cover;
-  object-position: center; /* Ajusta la posición de la imagen dentro del contenedor */
-}

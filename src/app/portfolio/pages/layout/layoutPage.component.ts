@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirestoreService } from '../../../firestore/firebase.service';
-import { FileData, StorageService } from '../../../firestore/storage.service';
+import { FileData } from '../../../firestore/storage.service';
 import { DarkMode } from '../../interfaces';
 import { GlobalDataService } from '../../../firestore/global-data.service';
 
@@ -15,14 +15,17 @@ export class LayoutPageComponent implements OnInit {
   public technologyStorageList: FileData[] = [];
   public technologyURL: Record<string, string> = {};
   public darkMode: boolean = true;
+  cargarFirestore: FirestoreService<FileData>;
 
   constructor(
     private firestore: AngularFirestore,
-    private storageService: StorageService,
     private globalDataService: GlobalDataService
   ) {
     this.firebaseDarkMode = new FirestoreService<DarkMode>(this.firestore);
+    this.cargarFirestore = new FirestoreService<FileData>(this.firestore);
     this.firebaseDarkMode.setCollection('style');
+    this.cargarFirestore.setCollection('icon')
+
   }
 
   async ngOnInit(): Promise<void> {
@@ -37,28 +40,17 @@ export class LayoutPageComponent implements OnInit {
         }
       });
 
-      this.technologyStorageList = await this.cargarTodasLasTecnologias('portfolio/tecnologias');
-      const techMap: Record<string, string> = {};
-
-      this.technologyStorageList.forEach(({ name, url }) => {
-        const techName = name.split('.')[0];
-        techMap[techName] = url;
+      this.cargarFirestore.getDocuments().subscribe({
+        next: (data: FileData[]) => {
+          this.globalDataService.setTechnologyURL(data);
+        },
+        error: (error: unknown) => {
+          console.error('Error cargando estilo:', error);
+        }
       });
-
-      this.technologyURL = techMap;
-      this.globalDataService.setTechnologyURL(techMap); // Actualizamos el servicio con las URLs de tecnologías
 
     } catch (error) {
       console.error('Error al cargar tecnologías:', error);
-    }
-  }
-
-  private async cargarTodasLasTecnologias(path: string): Promise<FileData[]> {
-    try {
-      return await this.storageService.getAllFileUrls(path);
-    } catch (error) {
-      console.error('Error obteniendo archivos de tecnologías:', error);
-      return [];
     }
   }
 }

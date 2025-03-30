@@ -1,49 +1,45 @@
-<shared-head [title]="title" />
+<div class="min-h-screen bg-gray-600 p-4">
+  <div class="mx-auto max-w-7xl">
+    <!-- Grid responsivo -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let skill of skills"
+        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
 
+        <!-- Contenido compacto -->
+        <div class="p-3 flex flex-col items-center text-center">
+          <!-- Icono con fondo -->
+          <div class="w-12 h-12 mb-3 bg-gray-600 p-2 rounded-lg shadow-md">
+            <img src="{{ skill.icon }}" alt="{{ skill.title }}" class="w-full h-full object-contain" />
+          </div>
 
-<!-- Estilo 1 -->
-<div class="m-6" *ngIf="darkMode">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let skill of skills"
-      class="bg-gray-800 border border-gray-700 rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl p-6 flex flex-col items-center text-center">
+          <!-- Título y descripción -->
+          <h3 class="text-lg font-semibold mb-1 text-blue-400">
+            {{ skill.title }}
+          </h3>
+          <p class="text-sm text-gray-300 mb-3 line-clamp-2">
+            {{ skill.description }}
+          </p>
 
-      <div class="w-14 h-14 mb-4 bg-gray-700 p-2 rounded-lg shadow-md">
-        <img src="{{ skill.icon }}" alt="Tecnología" class="w-full h-full object-contain" />
-      </div>
+          <!-- Tecnologías -->
+          <div class="flex flex-wrap justify-center gap-1 w-full">
+            <span *ngFor="let tech of skill.technologies"
+              class="flex items-center gap-1 text-xs text-blue-400 bg-gray-600 rounded-full px-2 py-1">
+              <img [src]="namefind(tech)" alt="Tecnología" class="w-4 h-4" />
 
-      <h3 class="text-lg font-bold text-white mb-2">{{ skill.title.toUpperCase() }}</h3>
-      <p class="text-sm text-gray-400 mb-4">{{ skill.description }}</p>
-
-      <div class="flex flex-wrap justify-center gap-2 mt-2">
-        <span *ngFor="let tech of skill.technologies"
-          class="flex items-center gap-2 font-medium text-sm text-blue-400 bg-gray-700 rounded-full px-3 py-1 shadow-md">
-          <img [src]="technologyURL[tech]" alt="Tecnología" class="w-5 h-5" />
-          {{ transform(tech) }}
-        </span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Estilo 2 -->
-<div class="m-6" *ngIf="!darkMode">
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-    <div *ngFor="let skill of skills"
-      class="bg-blue-950 rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl p-6 flex flex-col items-center text-center">
-
-      <div class="w-16 h-16 mb-4">
-        <img src="{{ skill.icon }}" alt="Tecnología" class="w-full h-full object-contain" />
-      </div>
-
-      <h3 class="text-lg font-bold text-white mb-2">{{ skill.title.toUpperCase() }}</h3>
-      <p class="text-sm text-gray-400 mb-4">{{ skill.description }}</p>
-
-      <div class="flex flex-wrap justify-center gap-2">
-        <span *ngFor="let tech of skill.technologies"
-          class="flex items-center gap-2 font-medium text-sm text-blue-600 bg-blue-100 rounded-full px-3 py-1">
-          <img [src]="technologyURL[tech]" alt="Tecnología" class="w-5 h-5" />
-          {{ transform(tech) }}
-        </span>
+    <!-- Empty state (idéntico al de referencia) -->
+    <div *ngIf="!skills?.length" class="text-center py-8">
+      <div class="inline-block p-4 bg-gray-700 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-white">No hay habilidades</h3>
       </div>
     </div>
   </div>
