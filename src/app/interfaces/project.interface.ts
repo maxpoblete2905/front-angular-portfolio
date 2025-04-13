@@ -1,4 +1,4 @@
-import { View } from './view';
+import { View } from './view.interface';
 import { Timestamp } from '@angular/fire/firestore'; // o 'firebase/firestore'
 
 export interface Project {

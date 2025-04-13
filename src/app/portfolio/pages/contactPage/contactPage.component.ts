@@ -1,31 +1,75 @@
-import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirestoreService } from '../../../firestore/firebase.service';
-import { Contact } from '../../interfaces';
+import { Contact } from '../../../interfaces';
+import { ContactService } from '../../../services/contact.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'portfolio-contact-page',
   templateUrl: './contactPage.component.html',
-  styleUrl: './contactPage.component.css',
+  styleUrls: ['./contactPage.component.css'],
   standalone: false
 })
-export class ContactPageComponent {
-  public title = 'contacto';
-  public message: string = 'Mensaje enviado correctamente';
-  public stateMessage: boolean = false;
-  private firestoreService: FirestoreService<Contact>;
+export class ContactPageComponent implements OnInit {
+  public messages: Contact[] = [];
+  public loadingMessages: boolean = false;
+  public isLoading: boolean = false;
+  public showAlert: boolean = false;
+  public alertMessage: string = '';
+  public alertType: 'success' | 'error' = 'success';
 
+  public contactForm: FormGroup;
 
-  public contactForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required]],
-    email: ['', [Validators.required]],
-    message: ['', [Validators.required]],
-  });
+  public statusConfig = {
+    pending: {
+      icon: '⏳',
+      color: 'text-yellow-400',
+      label: 'Pendiente'
+    },
+    read: {
+      icon: '✓',
+      color: 'text-blue-400',
+      label: 'Leído'
+    },
+    replied: {
+      icon: '↩️',
+      color: 'text-green-400',
+      label: 'Respondido'
+    },
+    archived: {
+      icon: '📁',
+      color: 'text-gray-400',
+      label: 'Archivado'
+    }
+  };
 
-  constructor(private fb: FormBuilder, private firestore: AngularFirestore) {
-    this.firestoreService = new FirestoreService<Contact>(this.firestore);
-    this.firestoreService.setCollection('contact-messages');
+  constructor(
+    private fb: FormBuilder,
+    private contactService: ContactService
+  ) {
+    this.contactForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      message: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadMessages();
+  }
+
+  loadMessages(): void {
+    this.loadingMessages = true;
+    this.contactService.getAll().subscribe({
+      next: (messages) => {
+        this.messages = messages;
+        this.loadingMessages = false;
+      },
+      error: (error) => {
+        console.error('Error loading messages:', error);
+        this.loadingMessages = false;
+      }
+    });
   }
 
   onSave(): void {
@@ -34,41 +78,51 @@ export class ContactPageComponent {
       return;
     }
 
-    const data = this.firestoreService.addDocument(this.contactForm.value);
-    if (data) {
-      this.stateMessage = true;
-      setTimeout(() => {
-        this.stateMessage = false;
-      }, 5000);
-
-      this.contactForm.reset({
-        name: '',
-        email: '',
-        mesage: '',
+    this.isLoading = true;
+    this.contactService.create(this.contactForm.value)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: () => {
+          this.showSuccess('Mensaje enviado correctamente');
+          this.contactForm.reset();
+          this.loadMessages();
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.showError('Error al enviar el mensaje');
+        }
       });
-    }
   }
 
-  isValidfield(field: string): boolean | null {
-    return (
-      this.contactForm.controls[field].errors &&
-      this.contactForm.controls[field].touched
-    );
+  showSuccess(message: string): void {
+    this.alertMessage = message;
+    this.alertType = 'success';
+    this.showAlert = true;
+    setTimeout(() => this.showAlert = false, 5000);
+  }
+
+  showError(message: string): void {
+    this.alertMessage = message;
+    this.alertType = 'error';
+    this.showAlert = true;
+    setTimeout(() => this.showAlert = false, 5000);
+  }
+
+  isValidField(field: string): boolean | null {
+    const control = this.contactForm.get(field);
+    if (!control) return null;
+    return control?.invalid && control?.touched;
   }
 
   getFieldError(field: string): string | null {
-    if (!this.contactForm.controls[field]) return null;
-    const errors = this.contactForm.controls[field].errors || {};
-    for (const key of Object.keys(errors)) {
-      switch (key) {
-        case 'required':
-          return 'Este campo es requerido';
-        case 'minlength':
-          return `Minimo ${errors['minlength'].requiredLength} caracters.`;
-        case 'min':
-          return 'el valor minimo es 0';
-      }
-    }
+    const control = this.contactForm.get(field);
+    if (!control || !control.errors) return null;
+
+    const errors = control.errors;
+    if (errors['required']) return 'Campo requerido';
+    if (errors['email']) return 'Email inválido';
+    if (errors['minlength']) return `Mínimo ${errors['minlength'].requiredLength} caracteres`;
+
     return null;
   }
 }

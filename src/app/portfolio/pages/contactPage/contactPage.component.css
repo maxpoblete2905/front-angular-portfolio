@@ -1,0 +1,30 @@
+/* Animación de spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Transiciones suaves */
+.transition-colors {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Mejora para los inputs */
+input,
+textarea {
+  transition: border-color 0.2s ease;
+}
+
+/* Bordes de estado */
+.border-l-4 {
+  border-left-width: 4px;
+}

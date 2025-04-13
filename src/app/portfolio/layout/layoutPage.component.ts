@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DarkMode } from '../../interfaces';
-import { GlobalDataService } from '../../../firestore/global-data.service';
+import { GlobalDataService } from '../../services/global-data.service';
 import { finalize } from 'rxjs';
-import { TechnologyService } from '../../../services/technology.service';
+import { TechnologyService } from '../../services/technology.service';
 import { Technology } from '../../interfaces/technology.interface';
 
 @Component({

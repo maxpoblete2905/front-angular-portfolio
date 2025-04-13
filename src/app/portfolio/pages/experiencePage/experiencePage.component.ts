@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PersonalInformation } from '../../interfaces/personal.interfece';
-import { GlobalDataService } from '../../../firestore/global-data.service';
+import { PersonalInformation } from '../../../interfaces/personal.interfece';
+import { GlobalDataService } from '../../../services/global-data.service';
 import { PersonalInformationService } from '../../../services/personal.service';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from './generic.service';
-import { Technology } from '../portfolio/interfaces/technology.interface';
+import { Technology } from '../interfaces/technology.interface';
 
 @Injectable({
     providedIn: 'root'

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Skill } from '../../interfaces';
-import { GlobalDataService } from '../../../firestore/global-data.service';
+import { Skill } from '../../../interfaces';
+import { GlobalDataService } from '../../../services/global-data.service';
 import { finalize } from 'rxjs';
 import { SkillService } from '../../../services/skills.service';
-import { Technology } from '../../interfaces/technology.interface';
+import { Technology } from '../../../interfaces/technology.interface';
 
 @Component({
   selector: 'portfolio-skills-page',

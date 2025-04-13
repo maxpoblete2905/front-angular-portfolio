@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../../interfaces';
+import { Project } from '../../../interfaces';
 import { finalize } from 'rxjs';
 import { ProjectService } from '../../../services/project.service';
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../../interfaces';
+import { Project } from '../../../interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { GlobalDataService } from '../../../firestore/global-data.service';
+import { GlobalDataService } from '../../../services/global-data.service';
 import { Timestamp } from 'firebase/firestore';
 import { ProjectService } from '../../../services/project.service';
-import { Technology } from '../../interfaces/technology.interface';
+import { Technology } from '../../../interfaces/technology.interface';
 
 @Component({
   selector: 'portfolio-project-page',
@@ -14,8 +14,8 @@ import { Technology } from '../../interfaces/technology.interface';
   standalone: false
 })
 export class ProjectPageComponent implements OnInit {
-  public title: string = 'Proyect';
   public id: number = 0;
+  isLoading: boolean = true;
   public project: Project = {
     title: '',
     description: '',
@@ -64,6 +64,7 @@ export class ProjectPageComponent implements OnInit {
           return;
         }
         this.project = project;
+        this.isLoading = false;
       });
   }
 

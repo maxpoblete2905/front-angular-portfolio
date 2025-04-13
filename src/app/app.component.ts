@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirestoreService } from './firestore/firebase.service';
-import { PersonalInformation } from './portfolio/interfaces/personal.interfece';
+import { PersonalInformation } from './interfaces/personal.interfece';
 import { PersonalInformationService } from './services/personal.service';
 
 @Component({

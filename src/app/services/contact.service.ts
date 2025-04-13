@@ -1,15 +1,15 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from './generic.service';
-import { Skill } from '../interfaces';
+import { Contact } from '../interfaces';
 
 @Injectable({
     providedIn: 'root'
 })
-export class SkillService extends GenericService<Skill> {
+export class ContactService extends GenericService<Contact> {
     constructor(
         http: HttpClient,
-        @Inject('SKILLS_API_URL') apiUrl: string
+        @Inject('CONTACT_API_URL') apiUrl: string
     ) {
         super(http, apiUrl);
     }

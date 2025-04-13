@@ -1,55 +1,173 @@
-<div class="min-h-screen bg-gray-600 p-4">
-  <div class="mx-auto">
-    <!-- Grid de educación y certificaciones -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <!-- Educación -->
-      <div *ngFor="let education of educations"
-        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
-
-        <div class="p-3">
-          <div class="flex justify-between items-start mb-1">
-            <h3 class="text-lg font-semibold text-blue-400">{{ education.title }}</h3>
-            <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+<div class="min-h-screen bg-gray-600 p-4 md:p-8">
+  <div class="mx-auto max-w-6xl">
+    <!-- Skeleton Loader -->
+    <div *ngIf="isLoading">
+      <!-- Skeleton para Educación -->
+      <div class="mb-8">
+        <div class="h-7 bg-gray-700 rounded w-48 mb-6"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div *ngFor="let item of [1,2]" class="bg-gray-700 rounded-lg border-l-4 border-gray-600 animate-pulse">
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-4">
+                <div class="space-y-2 w-full">
+                  <div class="h-6 bg-gray-600 rounded w-3/4"></div>
+                  <div class="h-4 bg-gray-600 rounded w-1/2"></div>
+                </div>
+                <div class="h-5 w-5 bg-gray-600 rounded"></div>
+              </div>
+              <div class="flex items-center mb-4">
+                <div class="h-4 w-4 bg-gray-600 rounded mr-2"></div>
+                <div class="h-3 bg-gray-600 rounded w-32"></div>
+                <div class="h-3 bg-gray-600 rounded w-24 ml-3"></div>
+              </div>
+              <div class="space-y-2">
+                <div class="h-3 bg-gray-600 rounded w-full"></div>
+                <div class="h-3 bg-gray-600 rounded w-5/6"></div>
+                <div class="h-3 bg-gray-600 rounded w-4/6"></div>
+              </div>
+            </div>
           </div>
-
-          <p class="text-gray-300 text-xs mb-1">{{ education.institution }}</p>
-          <p class="text-gray-400 text-xs mb-2">{{ education.startYear }} - {{ education.endYear }}</p>
-          <p class="text-gray-300 text-xs line-clamp-2">{{ education.description }}</p>
         </div>
       </div>
 
-      <!-- Certificaciones -->
-      <div *ngFor="let certification of certifications"
-        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
-
-        <div class="p-3">
-          <div class="flex justify-between items-start mb-1">
-            <h3 class="text-lg font-semibold text-blue-400">{{ certification.name }}</h3>
-            <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+      <!-- Skeleton para Certificaciones -->
+      <div class="mb-8">
+        <div class="h-7 bg-gray-700 rounded w-48 mb-6"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div *ngFor="let item of [1,2,3]" class="bg-gray-700 rounded-lg border-l-4 border-gray-600 animate-pulse">
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-4">
+                <div class="w-full">
+                  <div class="h-6 bg-gray-600 rounded w-3/4"></div>
+                </div>
+                <div class="h-5 w-5 bg-gray-600 rounded"></div>
+              </div>
+              <div class="flex items-center">
+                <div class="h-4 w-4 bg-gray-600 rounded mr-2"></div>
+                <div class="h-3 bg-gray-600 rounded w-20"></div>
+              </div>
+            </div>
           </div>
-
-          <p class="text-gray-400 text-xs">{{ certification.year }}</p>
-          <p *ngIf="certification.name" class="text-gray-300 text-xs mt-1">{{ certification.year }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Empty state -->
-    <div *ngIf="!educations?.length && !certifications?.length" class="text-center py-8">
-      <div class="inline-block p-4 bg-gray-700 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage && !isLoading" class="bg-gray-700 rounded-lg p-4 mb-6 border-l-4 border-red-500">
+      <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
         </svg>
-        <h3 class="mt-2 text-sm font-medium text-white">No hay registros educativos</h3>
+        <p class="text-gray-300">{{errorMessage}}</p>
+      </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div *ngIf="!isLoading && !errorMessage">
+      <!-- Sección de Educación -->
+      <div *ngIf="educations?.length" class="mb-8">
+        <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+          </svg>
+          Formación Académica
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div *ngFor="let education of educations" class="bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border-l-4 border-blue-500">
+            <div class="p-5">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h3 class="text-lg font-bold text-blue-400 mb-1">{{education.degree}}</h3>
+                  <p class="text-gray-300 text-sm mb-2">{{education.institution}}</p>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+
+              <div class="flex items-center text-gray-400 text-xs mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{{formatDate(education.period.start)}} - {{education.period.current ? 'Presente' : formatDate(education.period.end)}}</span>
+                <span class="mx-2">•</span>
+                <span>{{getDuration(education.period.start, education.period.end, education.period.current)}}</span>
+              </div>
+
+              <p class="text-gray-300 text-sm line-clamp-3">{{education.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Certificaciones -->
+      <div *ngIf="certifications?.length" class="mb-8">
+        <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Certificaciones
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div *ngFor="let cert of certifications" class="bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border-l-4" [class.border-green-500]="!isCertificationExpired(cert.expirationDate)" [class.border-red-500]="isCertificationExpired(cert.expirationDate)">
+            <div class="p-5">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h3 class="text-lg font-bold text-blue-400 mb-1">{{cert.title}}</h3>
+                  <p class="text-gray-300 text-sm mb-2">{{cert.institution}}</p>
+                </div>
+                <div class="flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="flex items-center text-gray-400 text-xs mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Emitido: {{formatDate(cert.issueDate)}}</span>
+              </div>
+
+              <div *ngIf="cert.expirationDate" class="flex items-center text-gray-400 text-xs mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span [class.text-red-400]="isCertificationExpired(cert.expirationDate)">
+                  {{isCertificationExpired(cert.expirationDate) ? 'Expirado' : 'Válido hasta'}}: {{formatDate(cert.expirationDate)}}
+                </span>
+              </div>
+
+              <div *ngIf="cert.credentialId" class="text-gray-400 text-xs mb-2">
+                <span class="font-mono">ID: {{cert.credentialId}}</span>
+              </div>
+
+              <div class="flex justify-between items-center mt-3">
+                <a *ngIf="cert.credentialUrl" [href]="cert.credentialUrl" target="_blank" class="text-xs text-blue-400 hover:underline flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Ver credencial
+                </a>
+                <img *ngIf="cert.imageUrl" [src]="cert.imageUrl" [alt]="cert.title" class="h-8 object-contain">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div *ngIf="!educations?.length && !certifications?.length" class="text-center py-12 bg-gray-700 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-blue-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="text-lg font-medium text-white mb-2">No se encontraron registros</h3>
+        <p class="text-gray-400 max-w-md mx-auto">Actualmente no hay información académica o certificaciones para mostrar.</p>
       </div>
     </div>
   </div>
