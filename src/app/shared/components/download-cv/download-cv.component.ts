@@ -4,7 +4,8 @@ import { StorageService } from '../../../firestore/storage.service';
 @Component({
   selector: 'app-download-cv',
   templateUrl: './download-cv.component.html',
-  styleUrl: './download-cv.component.css'
+  styleUrl: './download-cv.component.css',
+  standalone: false
 })
 export class DownloadCvComponent {
 

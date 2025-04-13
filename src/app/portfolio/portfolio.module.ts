@@ -4,12 +4,12 @@ import { PortfolioRoutingModule } from './portfolio-routing.module';
 import { ProjectPageComponent } from './pages/projectPage/projectPage.component';
 import { LayoutPageComponent } from './pages/layout/layoutPage.component';
 import { SkillsPageComponent } from './pages/skillsPage/skillsPage.component';
-import { ProjectsPageComponent } from './pages/projectsPage/projectsPage.component';
 import { ContactPageComponent } from './pages/contactPage/contactPage.component';
 import { ExperiencePageComponent } from './pages/experiencePage/experiencePage.component';
 import { EducationPageComponent } from './pages/educationPage/educationPage.component';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProjectsPageComponent } from './pages/projectsPage/projectsPage.component';
 
 @NgModule({
   declarations: [
@@ -19,13 +19,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     SkillsPageComponent,
     ContactPageComponent,
     ExperiencePageComponent,
-    EducationPageComponent
+    EducationPageComponent,
   ],
   imports: [
     CommonModule,
     PortfolioRoutingModule,
     SharedModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
 })
 export class PortfolioModule { }

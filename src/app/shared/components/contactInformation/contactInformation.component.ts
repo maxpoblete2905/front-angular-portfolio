@@ -12,6 +12,7 @@ interface ContactInformation {
   selector: 'shared-contact-information',
   templateUrl: './contactInformation.component.html',
   styleUrls: ['./contactInformation.component.css'],
+  standalone: false
 })
 export class ContactInformationComponent implements OnInit {
   private firestoreService: FirestoreService<ContactInformation>;
@@ -35,15 +36,15 @@ export class ContactInformationComponent implements OnInit {
 
   realizarAccion(seleccion: string, value: string): void {
     switch (seleccion) {
-    case 'phone':
-      window.location.href = `tel:+${value}`;
-      break;
-    case 'whatsapp':
-      window.open('https://web.whatsapp.com/', '_blank');
-      break;
-    case 'email':
-      window.location.href = `mailto:${value}`;
-      break;
+      case 'phone':
+        window.location.href = `tel:+${value}`;
+        break;
+      case 'whatsapp':
+        window.open('https://web.whatsapp.com/', '_blank');
+        break;
+      case 'email':
+        window.location.href = `mailto:${value}`;
+        break;
     }
   }
 }

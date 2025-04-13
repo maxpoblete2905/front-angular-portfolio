@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   selector: 'portfolio-education-page',
   templateUrl: './educationPage.component.html',
   styleUrls: ['./educationPage.component.css'],
+  standalone: false
 })
 export class EducationPageComponent {
   title: string = 'Educación';

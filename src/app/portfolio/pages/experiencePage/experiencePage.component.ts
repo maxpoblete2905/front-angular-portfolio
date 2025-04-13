@@ -1,70 +1,48 @@
-// experiencePage.component.ts
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FirestoreService } from '../../../firestore/firebase.service';
 import { PersonalInformation } from '../../interfaces/personal.interfece';
+import { GlobalDataService } from '../../../firestore/global-data.service';
+import { PersonalInformationService } from '../../../services/personal.service';
 
 @Component({
   selector: 'portfolio-experience-page',
   templateUrl: './experiencePage.component.html',
-  styleUrls: ['./experiencePage.component.css']
+  styleUrls: ['./experiencePage.component.css'],
+  standalone: false
 })
 export class ExperiencePageComponent implements OnInit {
-  private firestoreService: FirestoreService<PersonalInformation>;
-  public pathFirestore: string = 'personal-information'
-  personalInformation: PersonalInformation = {
+  public personalInformation: PersonalInformation = {
     description: '',
     name: '',
     university_title: '',
     update: '',
     descriptionPosition: ''
-  }
+  };
+  public isLoading: boolean = true;
+  public errorMessage: string | null = null;
+  @Input() description: string = '';
 
   constructor(
-    private firestore: AngularFirestore,
-  ) {
-    this.firestoreService = new FirestoreService<PersonalInformation>(this.firestore);
-    this.firestoreService.setCollection(this.pathFirestore);
-  }
+    private personalInformationService: PersonalInformationService
+  ) { }
 
   ngOnInit(): void {
-    this.firestoreService.getDocuments().subscribe({
+    this.loadPersonalInformation();
+  }
+
+  private loadPersonalInformation(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.personalInformationService.getAll().subscribe({
       next: (data: PersonalInformation[]) => {
-        this.personalInformation = data[0]
+        this.personalInformation = data[0];
+        this.isLoading = false;
       },
       error: (error: unknown) => {
-        console.error('Error cargando darkMode:', error);
+        console.error('Error cargando información personal:', error);
+        this.errorMessage = 'Error al cargar la información personal. Por favor, inténtalo de nuevo más tarde.';
+        this.isLoading = false;
       }
     });
   }
-
-  @Input() description: string = ''
-
-  skills = [
-    { name: 'Angular', experience: '6+ años de experiencia', icon: 'assets/icons/angular.svg' },
-    { name: 'Node.js', experience: '5+ años de experiencia', icon: 'assets/icons/nodejs.svg' },
-    { name: 'Diseño UI/UX', experience: 'Experto en experiencia de usuario', icon: 'assets/icons/design.svg' },
-    { name: 'Cloud', experience: 'AWS, Azure & Google Cloud', icon: 'assets/icons/cloud.svg' }
-  ];
-
-  projects = [
-    {
-      title: 'Plataforma E-commerce',
-      description: 'Solución escalable para retailer con 50k+ productos',
-      tech: ['Angular', 'Node.js', 'MongoDB', 'AWS'],
-      image: 'assets/projects/ecommerce.jpg'
-    },
-    {
-      title: 'Sistema de Gestión',
-      description: 'Herramienta empresarial para gestión de procesos',
-      tech: ['React', 'Python', 'PostgreSQL', 'Docker'],
-      image: 'assets/projects/management.jpg'
-    },
-    {
-      title: 'Aplicación Móvil',
-      description: 'App de salud con más de 100k descargas',
-      tech: ['Ionic', 'Firebase', 'Google Maps API'],
-      image: 'assets/projects/mobile-app.jpg'
-    }
-  ];
 }

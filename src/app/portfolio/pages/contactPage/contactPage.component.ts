@@ -8,6 +8,7 @@ import { Contact } from '../../interfaces';
   selector: 'portfolio-contact-page',
   templateUrl: './contactPage.component.html',
   styleUrl: './contactPage.component.css',
+  standalone: false
 })
 export class ContactPageComponent {
   public title = 'contacto';

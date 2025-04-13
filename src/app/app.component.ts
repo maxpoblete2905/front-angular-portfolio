@@ -3,11 +3,13 @@ import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FirestoreService } from './firestore/firebase.service';
 import { PersonalInformation } from './portfolio/interfaces/personal.interfece';
+import { PersonalInformationService } from './services/personal.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  standalone: false
 })
 export class AppComponent {
 
@@ -20,25 +22,38 @@ export class AppComponent {
     update: '',
     descriptionPosition: ''
   }
+  public isLoading: boolean = true;
+  public errorMessage: string | null = null;
 
   constructor(
     private firestore: AngularFirestore,
+    private personalInformationService: PersonalInformationService
+
   ) {
     this.firestoreService = new FirestoreService<PersonalInformation>(this.firestore);
     this.firestoreService.setCollection(this.pathFirestore);
   }
 
   ngOnInit(): void {
-    this.firestoreService.getDocuments().subscribe({
+    this.loadPersonalInformation()
+  }
+
+  private loadPersonalInformation(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.personalInformationService.getAll().subscribe({
       next: (data: PersonalInformation[]) => {
-        this.personalInformation = data[0]
+        this.personalInformation = data[0];
+        this.isLoading = false;
       },
       error: (error: unknown) => {
-        console.error('Error cargando darkMode:', error);
+        console.error('Error cargando información personal:', error);
+        this.errorMessage = 'Error al cargar la información personal. Por favor, inténtalo de nuevo más tarde.';
+        this.isLoading = false;
       }
     });
   }
-
 
   menuItems = [
     {

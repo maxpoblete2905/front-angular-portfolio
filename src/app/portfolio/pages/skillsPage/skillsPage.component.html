@@ -1,7 +1,34 @@
 <div class="min-h-screen bg-gray-600 p-4">
   <div class="mx-auto max-w-7xl">
-    <!-- Grid responsivo -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Skeleton Loader -->
+    <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let item of [1,2,3,4,5,6]"
+        class="bg-gray-700 rounded-lg shadow-md overflow-hidden h-48 animate-pulse">
+        <div class="p-3 flex flex-col items-center text-center h-full">
+          <!-- Icono skeleton -->
+          <div class="w-12 h-12 mb-3 bg-gray-600 rounded-lg shadow-md"></div>
+
+          <!-- Título skeleton -->
+          <div class="h-5 bg-gray-600 rounded w-3/4 mb-2"></div>
+
+          <!-- Descripción skeleton -->
+          <div class="w-full space-y-2 mb-3">
+            <div class="h-3 bg-gray-600 rounded w-5/6 mx-auto"></div>
+            <div class="h-3 bg-gray-600 rounded w-4/6 mx-auto"></div>
+          </div>
+
+          <!-- Tecnologías skeleton -->
+          <div class="flex flex-wrap justify-center gap-1 w-full mt-2">
+            <span class="w-16 h-6 bg-gray-600 rounded-full"></span>
+            <span class="w-14 h-6 bg-gray-600 rounded-full"></span>
+            <span class="w-12 h-6 bg-gray-600 rounded-full"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de habilidades -->
+    <div *ngIf="!isLoading && skills?.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div *ngFor="let skill of skills"
         class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
 
@@ -25,15 +52,14 @@
             <span *ngFor="let tech of skill.technologies"
               class="flex items-center gap-1 text-xs text-blue-400 bg-gray-600 rounded-full px-2 py-1">
               <img [src]="namefind(tech)" alt="Tecnología" class="w-4 h-4" />
-
             </span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Empty state (idéntico al de referencia) -->
-    <div *ngIf="!skills?.length" class="text-center py-8">
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && !skills?.length" class="text-center py-8">
       <div class="inline-block p-4 bg-gray-700 rounded-lg">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">

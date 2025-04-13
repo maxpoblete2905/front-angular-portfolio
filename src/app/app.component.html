@@ -1,8 +1,36 @@
-<!-- archivo app.component.html -->
 <div class="flex min-h-screen bg-gray-600">
-    <!-- Menú Lateral (solo desktop) -->
-    <aside class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 overflow-y-auto">
+    <!-- Skeleton Loader para Menú Lateral -->
+    <aside *ngIf="isLoading"
+        class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 overflow-y-auto animate-pulse">
+        <!-- Imagen de perfil skeleton -->
+        <div class="flex justify-center mb-6">
+            <div class="w-32 h-32 rounded-full bg-gray-600"></div>
+        </div>
 
+        <!-- Información personal skeleton -->
+        <div class="h-6 bg-gray-600 rounded w-3/4 mx-auto mb-2"></div>
+        <div class="h-4 bg-gray-600 rounded w-1/2 mx-auto mb-8"></div>
+
+        <!-- Menú de navegación skeleton -->
+        <nav class="space-y-2 mb-8">
+            <div *ngFor="let item of [1,2,3,4,5]" class="flex items-center gap-3 p-3 rounded-lg">
+                <div class="h-5 w-5 bg-gray-600 rounded"></div>
+                <div class="h-4 bg-gray-600 rounded w-3/4"></div>
+            </div>
+        </nav>
+
+        <!-- Botón de descarga CV skeleton -->
+        <div class="h-10 bg-gray-600 rounded-lg mb-8"></div>
+
+        <!-- Redes sociales skeleton -->
+        <div class="flex justify-center gap-4 pt-4 border-t border-gray-600">
+            <div *ngFor="let item of [1,2,3,4]" class="h-6 w-6 bg-gray-600 rounded-full"></div>
+        </div>
+    </aside>
+
+    <!-- Menú Lateral Real -->
+    <aside *ngIf="!isLoading"
+        class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 overflow-y-auto">
         <!-- Imagen de perfil -->
         <div class="flex justify-center mb-6">
             <div class="bg-gray-600 p-1 rounded-full shadow-md">
@@ -45,6 +73,10 @@
 
     <!-- Contenido principal -->
     <main class="flex-1">
-        <router-outlet />
+        <!-- Skeleton para el contenido principal -->
+        <div *ngIf="isLoading" class="h-full w-full bg-gray-600 animate-pulse"></div>
+
+        <!-- Contenido real -->
+        <router-outlet *ngIf="!isLoading" />
     </main>
 </div>
