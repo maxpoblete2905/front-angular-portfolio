@@ -1,7 +1,4 @@
-// archivo app.component.ts
 import { Component } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FirestoreService } from './firestore/firebase.service';
 import { PersonalInformation } from './interfaces/personal.interfece';
 import { PersonalInformationService } from './services/personal.service';
 
@@ -12,8 +9,6 @@ import { PersonalInformationService } from './services/personal.service';
   standalone: false
 })
 export class AppComponent {
-
-  private firestoreService: FirestoreService<PersonalInformation>;
   public pathFirestore: string = 'personal-information'
   personalInformation: PersonalInformation = {
     description: '',
@@ -26,13 +21,8 @@ export class AppComponent {
   public errorMessage: string | null = null;
 
   constructor(
-    private firestore: AngularFirestore,
     private personalInformationService: PersonalInformationService
-
-  ) {
-    this.firestoreService = new FirestoreService<PersonalInformation>(this.firestore);
-    this.firestoreService.setCollection(this.pathFirestore);
-  }
+  ) { }
 
   ngOnInit(): void {
     this.loadPersonalInformation()

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FirestoreService } from '../../../firestore/firebase.service';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 interface ContactInformation {
   value: string;
