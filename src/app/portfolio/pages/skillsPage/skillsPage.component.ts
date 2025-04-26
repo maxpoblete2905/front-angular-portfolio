@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Skill } from '../../../interfaces';
 import { GlobalDataService } from '../../../services/global-data.service';
-import { finalize } from 'rxjs';
-import { SkillService } from '../../../services/skills.service';
+import { takeUntil, Subject, combineLatest } from 'rxjs';
 import { Technology } from '../../../interfaces/technology.interface';
 
 @Component({
@@ -11,54 +10,64 @@ import { Technology } from '../../../interfaces/technology.interface';
   styleUrls: ['./skillsPage.component.css'],
   standalone: false
 })
-export class SkillsPageComponent implements OnInit {
+export class SkillsPageComponent implements OnInit, OnDestroy {
   public skills: Skill[] = [];
   public technologyURL: Technology[] = [];
-  public darkMode: boolean = true;
-  public isLoading: boolean = true;
-  public errorMessage: string | null = null;
+  public isLoading = true;
+  private destroy$ = new Subject<void>();
 
-  constructor(
-    private globalDataService: GlobalDataService,
-    private skillService: SkillService
-  ) { }
-
-  transform(value: string): string {
-    return value ? value.split('_').join(' ').toLowerCase() : value.toLowerCase();
-  }
-
-  namefind(name: string): string {
-    const techItem = this.technologyURL.find((item: Technology) => item.name.split('.')[0] === name);
-    return techItem ? techItem.url : '';
-  }
+  constructor(private globalDataService: GlobalDataService) { }
 
   ngOnInit(): void {
-    this.loadSkills();
     this.loadGlobalData();
   }
 
-  private loadSkills(): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-
-    this.skillService.getAll()
-      .pipe(
-        finalize(() => this.isLoading = false)
-      )
-      .subscribe({
-        next: (skills: Skill[]) => {
-          this.skills = skills;
-        },
-        error: (error: unknown) => {
-          console.error('Error cargando habilidades:', error);
-          this.errorMessage = 'Error al cargar las habilidades. Por favor, inténtalo de nuevo más tarde.';
-        }
-      });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadGlobalData(): void {
-    this.globalDataService.technologyURL$.subscribe(urls => {
-      this.technologyURL = urls;
+    this.isLoading = true;
+
+    combineLatest([
+      this.globalDataService.technologyURL$,
+      this.globalDataService.skills$
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: ([technologies, skills]) => {
+        this.technologyURL = technologies;
+        this.skills = skills;
+        this.isLoading = false;
+        console.log('Loading completed', {
+          skills: this.skills,
+          technologies: this.technologyURL,
+          isLoading: this.isLoading
+        });
+      },
+      error: (error) => {
+        console.error('Error loading data:', error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
     });
+  }
+
+  transform(value: string): string {
+    return value ? value.split('_').join(' ').toLowerCase() : '';
+  }
+
+  namefind(name: string): string {
+    if (!name || !this.technologyURL.length) return '';
+
+    const techItem = this.technologyURL.find(item => {
+      const techName = item.name.split('.')[0];
+      return techName === name;
+    });
+
+    return techItem?.url || '';
   }
 }

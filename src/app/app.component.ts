@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { PersonalInformation } from './interfaces/personal.interfece';
 import { PersonalInformationService } from './services/personal.service';
+import { AcademicService } from './services/academic.service';
+import { CertificationService } from './services/certification.service';
+import { ContactService } from './services/contact.service';
+import { GlobalDataService } from './services/global-data.service';
+import { ProjectService } from './services/project.service';
+import { SkillService } from './services/skills.service';
+import { TechnologyService } from './services/technology.service';
+import { forkJoin, catchError, finalize, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,40 +17,92 @@ import { PersonalInformationService } from './services/personal.service';
   standalone: false
 })
 export class AppComponent {
-  public pathFirestore: string = 'personal-information'
-  personalInformation: PersonalInformation = {
+  public isLoading: boolean = true;
+  public errorMessage: string | null = null;
+  public errorMessages: string[] = [];
+  public personalInformation: PersonalInformation = {
+    descriptionPosition: '',
     description: '',
     name: '',
     university_title: '',
-    update: '',
-    descriptionPosition: ''
+    update: ''
   }
-  public isLoading: boolean = true;
-  public errorMessage: string | null = null;
 
   constructor(
-    private personalInformationService: PersonalInformationService
+    private globalDataService: GlobalDataService,
+    private technologyService: TechnologyService,
+    private projectService: ProjectService,
+    private skillService: SkillService,
+    private personalInformationService: PersonalInformationService,
+    private academicService: AcademicService,
+    private certificationService: CertificationService,
+    private contactService: ContactService
   ) { }
 
   ngOnInit(): void {
-    this.loadPersonalInformation()
+    this.loadAllData();
   }
 
-  private loadPersonalInformation(): void {
+  private loadAllData(): void {
     this.isLoading = true;
-    this.errorMessage = null;
+    this.errorMessages = [];
 
-    this.personalInformationService.getAll().subscribe({
-      next: (data: PersonalInformation[]) => {
-        this.personalInformation = data[0];
-        this.isLoading = false;
-      },
-      error: (error: unknown) => {
-        console.error('Error cargando información personal:', error);
-        this.errorMessage = 'Error al cargar la información personal. Por favor, inténtalo de nuevo más tarde.';
-        this.isLoading = false;
+    forkJoin({
+      technologies: this.technologyService.getAll().pipe(
+        catchError(error => this.handleError(error, 'icon'))
+      ),
+      projects: this.projectService.getAll().pipe(
+        catchError(error => this.handleError(error, 'projects'))
+      ),
+      skills: this.skillService.getAll().pipe(
+        catchError(error => this.handleError(error, 'skills'))
+      ),
+      personalInfo: this.personalInformationService.getAll().pipe(
+        catchError(error => this.handleError(error, 'personal-information'))
+      ),
+      academics: this.academicService.getAll().pipe(
+        catchError(error => this.handleError(error, 'academics'))
+      ),
+      certifications: this.certificationService.getAll().pipe(
+        catchError(error => this.handleError(error, 'certifications'))
+      ),
+      contacts: this.contactService.getAll().pipe(
+        catchError(error => this.handleError(error, 'contacts'))
+      )
+    }).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (responses) => {
+        if (responses.technologies) {
+          this.globalDataService.setTechnologyURL(responses.technologies);
+        }
+        if (responses.projects) {
+          this.globalDataService.setProjects(responses.projects);
+        }
+        if (responses.skills) {
+          this.globalDataService.setSkills(responses.skills);
+        }
+        if (responses.personalInfo) {
+          this.globalDataService.setPersonalInformation(responses.personalInfo);
+          this.personalInformation = responses.personalInfo[0]
+        }
+        if (responses.academics) {
+          this.globalDataService.setAcademics(responses.academics);
+        }
+        if (responses.certifications) {
+          this.globalDataService.setCertifications(responses.certifications);
+        }
+        if (responses.contacts) {
+          this.globalDataService.setContacts(responses.contacts);
+        }
       }
     });
+  }
+
+  private handleError(error: any, context: string): Observable<null> {
+    console.error(`Error cargando ${context}:`, error);
+    this.errorMessages.push(`Error al cargar ${context}.`);
+    return of(null);
   }
 
   menuItems = [

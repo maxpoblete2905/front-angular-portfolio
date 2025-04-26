@@ -1,85 +1,69 @@
-import { Component, OnInit } from '@angular/core';
-import { finalize } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Academic } from '../../../interfaces';
-import { AcademicService } from '../../../services/academic.service';
-import { CertificationService } from '../../../services/certification.service';
 import { Certification } from '../../../interfaces/certification.interface';
+import { GlobalDataService } from '../../../services/global-data.service';
+import { Subject, combineLatest, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'portfolio-education-page',
   templateUrl: './educationPage.component.html',
   styleUrls: ['./educationPage.component.css'],
-  standalone: false,
-  providers: [DatePipe]
+  providers: [DatePipe],
+  standalone: false
 })
-export class EducationPageComponent implements OnInit {
+export class EducationPageComponent implements OnInit, OnDestroy {
   public educations: Academic[] = [];
   public certifications: Certification[] = [];
-  public isLoading: boolean = true;
-  public errorMessage: string | null = null;
-  public loadingEducation: boolean = true;
-  public loadingCertifications: boolean = true;
+  public isLoading = true;
+  public errorMessages: string[] = [];
+  private destroy$ = new Subject<void>();
+  public errorMessage: string = ''
+
+
 
   constructor(
-    private academicService: AcademicService,
-    private certificationService: CertificationService,
+    private globalDataService: GlobalDataService,
     private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
-    this.loadEducation();
-    this.loadCertifications();
+    this.loadEducationData();
   }
 
-  private loadEducation(): void {
-    this.loadingEducation = true;
-    this.errorMessage = null;
-
-    this.academicService.getAll()
-      .pipe(
-        finalize(() => {
-          this.loadingEducation = false;
-          this.checkAllLoaded();
-        })
-      )
-      .subscribe({
-        next: (academics: Academic[]) => {
-          this.educations = academics
-            .sort((a, b) => new Date(b.period.end).getTime() - new Date(a.period.end).getTime());
-        },
-        error: (error: unknown) => {
-          console.error('Error cargando educación:', error);
-          this.errorMessage = 'Error al cargar la información académica. Por favor, inténtalo de nuevo más tarde.';
-        }
-      });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private loadCertifications(): void {
-    this.loadingCertifications = true;
-    this.errorMessage = null;
+  private loadEducationData(): void {
+    this.isLoading = true;
+    this.errorMessages = [];
 
-    this.certificationService.getAll()
-      .pipe(
-        finalize(() => {
-          this.loadingCertifications = false;
-          this.checkAllLoaded();
-        })
-      )
-      .subscribe({
-        next: (certifications: Certification[]) => {
-          this.certifications = certifications
-            .sort((a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime());
-        },
-        error: (error: unknown) => {
-          console.error('Error cargando certificaciones:', error);
-          this.errorMessage = 'Error al cargar las certificaciones. Por favor, inténtalo de nuevo más tarde.';
-        }
-      });
-  }
-
-  private checkAllLoaded(): void {
-    this.isLoading = this.loadingEducation || this.loadingCertifications;
+    combineLatest([
+      this.globalDataService.academics$,
+      this.globalDataService.certifications$
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: ([academics, certifications]) => {
+        this.educations = academics.sort((a, b) =>
+          new Date(b.period.end).getTime() - new Date(a.period.end).getTime()
+        );
+        this.certifications = certifications.sort((a, b) =>
+          new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
+        );
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading education data:', error);
+        this.errorMessages = [
+          'Error al cargar los datos académicos.',
+          'Error al cargar las certificaciones.'
+        ];
+        this.isLoading = false;
+      }
+    });
   }
 
   formatDate(date: Date): string {
