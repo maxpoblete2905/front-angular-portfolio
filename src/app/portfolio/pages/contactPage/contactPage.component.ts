@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Contact } from '../../../interfaces';
-import { ContactService } from '../../../services/contact.service';
 import { finalize } from 'rxjs';
+import { ContactService } from '../../../services/portafolio/contact.service';
 
 @Component({
   selector: 'portfolio-contact-page',

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { PersonalInformation } from './interfaces/personal.interfece';
-import { PersonalInformationService } from './services/personal.service';
-import { AcademicService } from './services/academic.service';
-import { CertificationService } from './services/certification.service';
-import { ContactService } from './services/contact.service';
+import { PersonalInformationService } from './services/portafolio/personal.service';
+import { AcademicService } from './services/portafolio/academic.service';
 import { GlobalDataService } from './services/global-data.service';
-import { ProjectService } from './services/project.service';
-import { SkillService } from './services/skills.service';
-import { TechnologyService } from './services/technology.service';
+import { ProjectService } from './services/portafolio/project.service';
+import { SkillService } from './services/portafolio/skills.service';
+import { TechnologyService } from './services/portafolio/technology.service';
 import { forkJoin, catchError, finalize, Observable, of } from 'rxjs';
+import { CertificationService } from './services/portafolio/certification.service';
+import { ContactService } from './services/portafolio/contact.service';
 
 @Component({
   selector: 'app-root',

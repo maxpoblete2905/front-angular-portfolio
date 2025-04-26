@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { GlobalDataService } from '../../../services/global-data.service';
 import { Timestamp } from 'firebase/firestore';
-import { ProjectService } from '../../../services/project.service';
+import { ProjectService } from '../../../services/portafolio/project.service';
 import { Technology } from '../../../interfaces/technology.interface';
 
 @Component({

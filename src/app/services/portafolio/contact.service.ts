@@ -1,15 +1,15 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Project } from '../interfaces';
-import { GenericService } from './generic.service';
+import { Contact } from '../../interfaces';
+import { GenericService } from '../generic.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ProjectService extends GenericService<Project> {
+export class ContactService extends GenericService<Contact> {
     constructor(
         http: HttpClient,
-        @Inject('PROJECTS_API_URL') apiUrl: string
+        @Inject('CONTACT_API_URL') apiUrl: string
     ) {
         super(http, apiUrl);
     }
