@@ -78,11 +78,10 @@
       </div>
     </div>
 
-    <!-- Lista de mensajes -->
+    <!-- Lista de mensajes
     <div class="mt-6 bg-gray-700 rounded-lg shadow-md p-4">
       <h2 class="text-lg font-semibold text-blue-400 mb-3">Mensajes Recibidos</h2>
 
-      <!-- Cargando -->
       <div *ngIf="loadingMessages" class="flex justify-center py-4">
         <svg class="animate-spin h-6 w-6 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
           viewBox="0 0 24 24">
@@ -93,7 +92,6 @@
         </svg>
       </div>
 
-      <!-- Mensajes -->
       <div *ngIf="!loadingMessages" class="space-y-3">
         <div *ngFor="let msg of messages" class="bg-gray-600 rounded p-3 border-l-4"
           [class.border-yellow-400]="msg.status === 'pending'" [class.border-blue-400]="msg.status === 'read'"
@@ -111,11 +109,12 @@
           <p class="text-gray-400 text-xs mt-2">{{ msg.createdAt | date:'medium' }}</p>
         </div>
 
-        <!-- Vacío -->
         <div *ngIf="messages.length === 0" class="text-center py-6 text-gray-400">
           No hay mensajes para mostrar
         </div>
       </div>
-    </div>
+ 
+  </div>
+     -->
   </div>
 </div>

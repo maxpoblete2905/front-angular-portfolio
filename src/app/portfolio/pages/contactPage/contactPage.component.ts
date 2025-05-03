@@ -55,22 +55,22 @@ export class ContactPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadMessages();
+    // this.loadMessages();
   }
 
-  loadMessages(): void {
-    this.loadingMessages = true;
-    this.contactService.getAll().subscribe({
-      next: (messages) => {
-        this.messages = messages;
-        this.loadingMessages = false;
-      },
-      error: (error) => {
-        console.error('Error loading messages:', error);
-        this.loadingMessages = false;
-      }
-    });
-  }
+  // loadMessages(): void {
+  //   this.loadingMessages = true;
+  //   this.contactService.getAll().subscribe({
+  //     next: (messages) => {
+  //       this.messages = messages;
+  //       this.loadingMessages = false;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error loading messages:', error);
+  //       this.loadingMessages = false;
+  //     }
+  //   });
+  // }
 
   onSave(): void {
     if (this.contactForm.invalid) {
@@ -85,7 +85,7 @@ export class ContactPageComponent implements OnInit {
         next: () => {
           this.showSuccess('Mensaje enviado correctamente');
           this.contactForm.reset();
-          this.loadMessages();
+          // this.loadMessages();
         },
         error: (error) => {
           console.error('Error:', error);

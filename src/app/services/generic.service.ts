@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import * as crypto from 'crypto-js'; // Instala con: npm install crypto-js
+import * as crypto from 'crypto-js';
 import { environment } from '../../environments/environment';
 
 @Injectable({

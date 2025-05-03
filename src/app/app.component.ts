@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PersonalInformation } from './interfaces/personal.interfece';
+import { personalInformation, PersonalInformation } from './interfaces/personal.interfece';
 import { PersonalInformationService } from './services/portafolio/personal.service';
 import { AcademicService } from './services/portafolio/academic.service';
 import { GlobalDataService } from './services/global-data.service';
@@ -20,13 +20,7 @@ export class AppComponent {
   public isLoading: boolean = true;
   public errorMessage: string | null = null;
   public errorMessages: string[] = [];
-  public personalInformation: PersonalInformation = {
-    descriptionPosition: '',
-    description: '',
-    name: '',
-    university_title: '',
-    update: ''
-  }
+  public personalInformation: PersonalInformation = personalInformation
 
   constructor(
     private globalDataService: GlobalDataService,
