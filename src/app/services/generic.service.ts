@@ -25,6 +25,7 @@ export class GenericService<T> {
   }
 
   private getHeaders(): HttpHeaders {
+    console.log(this.generateApiKey())
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'x-api-key': this.generateApiKey()
