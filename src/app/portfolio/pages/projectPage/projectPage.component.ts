@@ -27,7 +27,8 @@ export class ProjectPageComponent implements OnInit {
     views: [],
     state: false,
     creationDate: Timestamp.now(),
-    completedProfile: false
+    completedProfile: false,
+    tasks: []
   };
   public currentIndex: number = 0;
   public technologyURL: Technology[] = [];

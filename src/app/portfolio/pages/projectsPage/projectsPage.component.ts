@@ -11,11 +11,12 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class ProjectsPageComponent implements OnInit, OnDestroy {
   public projects: Project[] = [];
+  public groupedProjects: { [companyName: string]: Project[] } = {};
   public isLoading = true;
   public errorMessage: string | null = null;
   private destroy$ = new Subject<void>();
 
-  constructor(private globalDataService: GlobalDataService) { }
+  constructor(private globalDataService: GlobalDataService) {}
 
   ngOnInit(): void {
     this.loadProjects();
@@ -31,12 +32,11 @@ export class ProjectsPageComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
 
     this.globalDataService.projects$
-      .pipe(
-        takeUntil(this.destroy$)
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (projects: Project[]) => {
           this.projects = projects.filter(project => project.state === true);
+          this.groupProjectsByCompany(this.projects);
           this.isLoading = false;
           console.log('Projects loaded:', this.projects);
         },
@@ -49,5 +49,16 @@ export class ProjectsPageComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         }
       });
+  }
+
+  private groupProjectsByCompany(projects: Project[]): void {
+    this.groupedProjects = projects.reduce((acc, project) => {
+      const company = project.companyName || 'Sin compañía';
+      if (!acc[company]) {
+        acc[company] = [];
+      }
+      acc[company].push(project);
+      return acc;
+    }, {} as { [key: string]: Project[] });
   }
 }

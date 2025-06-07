@@ -1,60 +1,56 @@
-<div class="min-h-screen bg-gray-600 p-4">
+<div class="min-h-screen bg-gray-600 p-6 text-white">
   <div class="mx-auto max-w-7xl">
-    <!-- Estado de error -->
-    <div *ngIf="errorMessage" class="p-4 mb-4 text-red-400 bg-gray-700 rounded-lg">
+
+    <!-- Error -->
+    <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-800/30 text-red-300 rounded-lg border border-red-500">
       {{ errorMessage }}
-      <button (click)="loadProjects()" class="ml-2 text-blue-400">
-        Reintentar
-      </button>
+      <button (click)="loadProjects()" class="ml-3 text-blue-400 underline">Reintentar</button>
     </div>
 
-    <!-- Skeleton loader -->
-    <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div *ngFor="let item of [1,2,3,4]" class="bg-gray-700 rounded-lg shadow-md overflow-hidden h-28">
-        <div class="p-3 animate-pulse">
-          <div class="flex justify-between items-start mb-3">
-            <div class="h-5 bg-gray-600 rounded w-3/4"></div>
-            <div class="h-4 w-4 bg-gray-600 rounded"></div>
-          </div>
-          <div class="space-y-2">
-            <div class="h-3 bg-gray-600 rounded w-full"></div>
-            <div class="h-3 bg-gray-600 rounded w-5/6"></div>
-          </div>
-        </div>
+    <!-- Loading skeleton -->
+    <div *ngIf="isLoading" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div *ngFor="let item of [1,2,3,4,5,6]" class="bg-gray-800 rounded-2xl shadow-lg p-4 animate-pulse space-y-4">
+        <div class="h-5 bg-gray-700 rounded w-3/4"></div>
+        <div class="h-4 bg-gray-700 rounded w-1/2"></div>
+        <div class="h-3 bg-gray-700 rounded w-full"></div>
       </div>
     </div>
 
-    <!-- Grid de proyectos -->
-    <div *ngIf="!isLoading && projects?.length" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div *ngFor="let project of projects"
-        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 group relative">
+    <!-- Proyectos agrupados por compañía -->
+    <div *ngIf="!isLoading && groupedProjects" class="space-y-10">
+      <div *ngFor="let company of groupedProjects | keyvalue">
+        <h2 class="text-2xl font-bold text-white border-b border-gray-400 pb-2 mb-4">
+          {{ company.key }}
+        </h2>
 
-        <div class="p-3">
-          <div class="flex justify-between items-start mb-1">
-            <h3 class="text-lg font-semibold text-blue-400">{{ project.title }}</h3>
-            <svg xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let project of company.value"
+            class="bg-gradient-to-br from-gray-700 to-gray-700 rounded-2xl shadow-lg overflow-hidden group relative transition-transform hover:-translate-y-1 hover:shadow-blue-500/20 duration-300">
+
+            <a [routerLink]="['/portfolio/project/', project.id]" class="absolute inset-0 z-10" aria-label="Ver proyecto"></a>
+
+            <div class="p-5 space-y-2">
+              <h3 class="text-lg font-semibold text-blue-400 group-hover:underline transition">
+                {{ project.title }}
+              </h3>
+              <p class="text-sm text-gray-400">{{ project.position }}</p>
+              <p class="text-xs text-gray-500 italic">{{ project.client }}</p>
+            </div>
           </div>
-
-          <p class="text-gray-300 text-xs mb-1">{{ project.companyName }}</p>
-          <a [routerLink]="['/portfolio/project/', project.id]" class="absolute inset-0 z-10 cursor-pointer"
-            aria-label="Ver proyecto"></a>
         </div>
       </div>
     </div>
 
     <!-- Estado vacío -->
-    <div *ngIf="!isLoading && !projects?.length" class="text-center py-8">
-      <div class="inline-block p-4 bg-gray-700 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
+    <div *ngIf="!isLoading && !projects?.length" class="flex justify-center items-center h-60">
+      <div class="text-center space-y-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-600" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
         </svg>
-        <h3 class="mt-2 text-sm font-medium text-white">No hay proyectos disponibles</h3>
+        <h3 class="text-gray-400">No hay proyectos disponibles</h3>
       </div>
     </div>
+
   </div>
 </div>
