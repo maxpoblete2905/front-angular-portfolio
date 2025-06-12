@@ -1,13 +1,23 @@
 <div class="min-h-screen bg-gray-600 p-4">
   <div class="mx-auto max-w-7xl">
     <!-- Alerta -->
-    <div *ngIf="showAlert" class="fixed top-4 right-4 z-50 bg-gray-700 rounded-lg border-l-4 p-3 shadow-lg"
-      [class.border-green-500]="alertType === 'success'" [class.border-red-500]="alertType === 'error'">
+    <div
+      *ngIf="showAlert"
+      class="fixed top-4 right-4 z-50 bg-gray-700 rounded-lg border-l-4 p-3 shadow-lg"
+      [class.border-green-500]="alertType === 'success'"
+      [class.border-red-500]="alertType === 'error'"
+    >
       <div class="flex items-center">
-        <span [class.text-green-400]="alertType === 'success'" [class.text-red-400]="alertType === 'error'">
+        <span
+          [class.text-green-400]="alertType === 'success'"
+          [class.text-red-400]="alertType === 'error'"
+        >
           {{ alertMessage }}
         </span>
-        <button (click)="showAlert = false" class="ml-3 text-gray-400 hover:text-white">
+        <button
+          (click)="showAlert = false"
+          class="ml-3 text-gray-400 hover:text-white"
+        >
           ✕
         </button>
       </div>
@@ -22,15 +32,20 @@
 
       <!-- Formulario -->
       <div class="bg-gray-700 rounded-lg shadow-md p-4">
-        <h2 class="text-lg font-semibold text-blue-400 mb-3">Formulario de Contacto</h2>
+        <h2 class="text-lg font-semibold text-blue-400 mb-3">
+          Formulario de Contacto
+        </h2>
 
         <form [formGroup]="contactForm" (ngSubmit)="onSave()" class="space-y-3">
           <!-- Nombre -->
           <div>
             <label class="block text-gray-300 text-sm mb-1">Nombre</label>
-            <input formControlName="name" type="text"
+            <input
+              formControlName="name"
+              type="text"
               class="w-full bg-gray-600 text-gray-300 rounded px-3 py-2 border border-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-400"
-              [class.border-red-500]="isValidField('name')">
+              [class.border-red-500]="isValidField('name')"
+            />
             <span *ngIf="isValidField('name')" class="text-red-400 text-xs">
               {{ getFieldError('name') }}
             </span>
@@ -39,9 +54,12 @@
           <!-- Email -->
           <div>
             <label class="block text-gray-300 text-sm mb-1">Email</label>
-            <input formControlName="email" type="email"
+            <input
+              formControlName="email"
+              type="email"
               class="w-full bg-gray-600 text-gray-300 rounded px-3 py-2 border border-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-400"
-              [class.border-red-500]="isValidField('email')">
+              [class.border-red-500]="isValidField('email')"
+            />
             <span *ngIf="isValidField('email')" class="text-red-400 text-xs">
               {{ getFieldError('email') }}
             </span>
@@ -50,26 +68,44 @@
           <!-- Mensaje -->
           <div>
             <label class="block text-gray-300 text-sm mb-1">Mensaje</label>
-            <textarea formControlName="message" rows="4"
+            <textarea
+              formControlName="message"
+              rows="4"
               class="w-full bg-gray-600 text-gray-300 rounded px-3 py-2 border border-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-400"
-              [class.border-red-500]="isValidField('message')"></textarea>
+              [class.border-red-500]="isValidField('message')"
+            ></textarea>
             <span *ngIf="isValidField('message')" class="text-red-400 text-xs">
               {{ getFieldError('message') }}
             </span>
           </div>
 
           <!-- Botón -->
-          <button type="submit"
+          <button
+            type="submit"
             class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors"
-            [disabled]="isLoading">
+            [disabled]="isLoading"
+          >
             <span *ngIf="!isLoading">Enviar Mensaje</span>
             <span *ngIf="isLoading" class="flex items-center justify-center">
-              <svg class="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
+              <svg
+                class="animate-spin h-4 w-4 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Enviando...
             </span>
@@ -78,43 +114,66 @@
       </div>
     </div>
 
-    <!-- Lista de mensajes
-    <div class="mt-6 bg-gray-700 rounded-lg shadow-md p-4">
-      <h2 class="text-lg font-semibold text-blue-400 mb-3">Mensajes Recibidos</h2>
+    <!-- <div class="mt-6 bg-gray-700 rounded-lg shadow-md p-4">
+      <h2 class="text-lg font-semibold text-blue-400 mb-3">
+        Mensajes Recibidos
+      </h2>
 
       <div *ngIf="loadingMessages" class="flex justify-center py-4">
-        <svg class="animate-spin h-6 w-6 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-          </path>
+        <svg
+          class="animate-spin h-6 w-6 text-blue-400"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
         </svg>
       </div>
 
       <div *ngIf="!loadingMessages" class="space-y-3">
-        <div *ngFor="let msg of messages" class="bg-gray-600 rounded p-3 border-l-4"
-          [class.border-yellow-400]="msg.status === 'pending'" [class.border-blue-400]="msg.status === 'read'"
-          [class.border-green-400]="msg.status === 'replied'" [class.border-gray-400]="msg.status === 'archived'">
-
+        <div
+          *ngFor="let msg of messages"
+          class="bg-gray-600 rounded p-3 border-l-4"
+          [class.border-yellow-400]="msg.status === 'pending'"
+          [class.border-blue-400]="msg.status === 'read'"
+          [class.border-green-400]="msg.status === 'replied'"
+          [class.border-gray-400]="msg.status === 'archived'"
+        >
           <div class="flex justify-between items-center">
             <h3 class="text-blue-400 font-medium">{{ msg.name }}</h3>
-            <span class="text-xs px-2 py-1 rounded-full bg-gray-700"
-              [class]="statusConfig[msg.status || 'pending'].color">
+            <span
+              class="text-xs px-2 py-1 rounded-full bg-gray-700"
+              [class]="statusConfig[msg.status || 'pending'].color"
+            >
               {{ statusConfig[msg.status || 'pending'].icon }}
               {{ statusConfig[msg.status || 'pending'].label }}
             </span>
           </div>
 
-          <p class="text-gray-400 text-xs mt-2">{{ msg.createdAt | date:'medium' }}</p>
+          <p class="text-gray-400 text-xs mt-2">
+            {{ msg.createdAt | date : 'medium' }}
+          </p>
         </div>
 
-        <div *ngIf="messages.length === 0" class="text-center py-6 text-gray-400">
+        <div
+          *ngIf="messages.length === 0"
+          class="text-center py-6 text-gray-400"
+        >
           No hay mensajes para mostrar
         </div>
       </div>
- 
-  </div>
-     -->
+    </div> -->
   </div>
 </div>

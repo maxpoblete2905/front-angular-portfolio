@@ -1,82 +1,116 @@
 <div class="flex min-h-screen bg-gray-600">
-    <!-- Skeleton Loader para Menú Lateral -->
-    <aside *ngIf="isLoading"
-        class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 overflow-y-auto animate-pulse">
-        <!-- Imagen de perfil skeleton -->
-        <div class="flex justify-center mb-6">
-            <div class="w-32 h-32 rounded-full bg-gray-600"></div>
-        </div>
+  <!-- Skeleton Loader -->
+  <aside
+    *ngIf="isLoading"
+    class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 animate-pulse"
+  >
+    <div class="flex justify-center mb-6">
+      <div class="w-32 h-32 rounded-full bg-gray-600"></div>
+    </div>
 
-        <!-- Información personal skeleton -->
-        <div class="h-6 bg-gray-600 rounded w-3/4 mx-auto mb-2"></div>
-        <div class="h-4 bg-gray-600 rounded w-1/2 mx-auto mb-8"></div>
+    <div class="h-7 bg-gray-600 rounded w-3/4 mx-auto mb-2"></div>
+    <div class="h-4 bg-gray-600 rounded w-1/2 mx-auto mb-6"></div>
 
-        <!-- Menú de navegación skeleton -->
-        <nav class="space-y-2 mb-8">
-            <div *ngFor="let item of [1,2,3,4,5]" class="flex items-center gap-3 p-3 rounded-lg">
-                <div class="h-5 w-5 bg-gray-600 rounded"></div>
-                <div class="h-4 bg-gray-600 rounded w-3/4"></div>
-            </div>
-        </nav>
+    <nav class="space-y-2 mb-6">
+      <div
+        *ngFor="let item of [1, 2, 3, 4, 5]"
+        class="flex items-center gap-3 p-3 rounded-lg bg-gray-700"
+      >
+        <div class="h-5 w-5 bg-gray-600 rounded"></div>
+        <div class="h-4 bg-gray-600 rounded w-3/4"></div>
+      </div>
+    </nav>
 
-        <!-- Botón de descarga CV skeleton -->
-        <div class="h-10 bg-gray-600 rounded-lg mb-8"></div>
+    <div class="h-10 bg-gray-600 rounded-lg mb-6"></div>
 
-        <!-- Redes sociales skeleton -->
-        <div class="flex justify-center gap-4 pt-4 border-t border-gray-600">
-            <div *ngFor="let item of [1,2,3,4]" class="h-6 w-6 bg-gray-600 rounded-full"></div>
-        </div>
-    </aside>
+    <div class="flex justify-center gap-4 pt-4 border-t border-gray-600">
+      <div
+        *ngFor="let item of [1, 2, 3, 4]"
+        class="h-6 w-6 bg-gray-600 rounded-full"
+      ></div>
+    </div>
+  </aside>
 
-    <!-- Menú Lateral Real -->
-    <aside *ngIf="!isLoading"
-        class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 overflow-y-auto">
-        <!-- Imagen de perfil -->
-        <div class="flex justify-center mb-6">
-            <div class="bg-gray-600 p-1 rounded-full shadow-md">
-                <img src="https://firebasestorage.googleapis.com/v0/b/portfolio-549f8.appspot.com/o/portfolio%2Fperfil.jpeg?alt=media&token=5913f7c4-163a-4e4e-8663-977507603d90"
-                    alt="Foto de perfil"
-                    class="w-32 h-32 rounded-full object-cover border-2 border-gray-500 hover:border-blue-400 transition-colors">
-            </div>
-        </div>
+  <!-- Menú Real -->
+  <aside
+    *ngIf="!isLoading"
+    class="hidden md:block w-64 bg-gray-700 p-6 sticky top-0 h-screen border-r border-gray-600 overflow-y-auto"
+  >
+    <div class="flex justify-center mb-1">
+      <div class="bg-gray-600 p-1 rounded-full shadow-md">
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/portfolio-549f8.appspot.com/o/portfolio%2Fperfil.jpeg?alt=media&token=5913f7c4-163a-4e4e-8663-977507603d90"
+          alt="Foto de perfil"
+          class="w-32 h-32 rounded-full object-cover border-2 border-gray-500 hover:border-blue-400 transition-colors"
+        />
+      </div>
+    </div>
 
-        <!-- Información personal -->
-        <h1 class="text-center text-blue-400 font-bold text-xl mb-1">{{ personalInformation.name }} </h1>
-        <p class="text-center text-gray-300 text-sm mb-8">{{ personalInformation.university_title }} </p>
+    <h1 class="text-center text-blue-400 font-bold text-xl mb-1 truncate">
+      {{ personalInformation.name }}
+    </h1>
+    <p class="text-center text-gray-300 text-sm mb-2 truncate">
+      {{ personalInformation.university_title }}
+    </p>
 
-        <!-- Menú de navegación -->
-        <nav class="space-y-2 mb-8">
-            <a *ngFor="let item of menuItems" [routerLink]="item.link" routerLinkActive="bg-gray-600 text-blue-400"
-                class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-gray-600 hover:text-blue-300 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon" />
-                </svg>
-                <span class="text-sm font-medium">{{ item.label }}</span>
-            </a>
-        </nav>
+    <nav class="mb-5">
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.link"
+        routerLinkActive="bg-gray-600 text-blue-400"
+        class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-gray-600 hover:text-blue-300 transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="item.icon"
+          />
+        </svg>
+        <span class="text-sm font-medium">{{ item.label }}</span>
+      </a>
+    </nav>
 
-        <!-- Botón de descarga CV -->
-        <app-download-cv />
+    <app-download-cv />
 
-        <!-- Redes sociales -->
-        <div class="flex justify-center gap-4 pt-4 border-t border-gray-600">
-            <a *ngFor="let social of socialLinks" [href]="social.url" target="_blank"
-                class="text-gray-400 hover:text-blue-400 transition-colors p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="social.icon" />
-                </svg>
-            </a>
-        </div>
-    </aside>
+    <div class="flex justify-center gap-4 pt-4 border-t border-gray-600">
+      <a
+        *ngFor="let social of socialLinks"
+        [href]="social.url"
+        target="_blank"
+        class="text-gray-400 hover:text-blue-400 transition-colors p-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="social.icon"
+          />
+        </svg>
+      </a>
+    </div>
+  </aside>
 
-    <!-- Contenido principal -->
-    <main class="flex-1">
-        <!-- Skeleton para el contenido principal -->
-        <div *ngIf="isLoading" class="h-full w-full bg-gray-600 animate-pulse"></div>
-
-        <!-- Contenido real -->
-        <router-outlet *ngIf="!isLoading" />
-    </main>
+  <!-- Contenido principal -->
+  <main class="flex-1 min-w-0">
+    <div
+      *ngIf="isLoading"
+      class="h-full w-full bg-gray-600 animate-pulse"
+    ></div>
+    <router-outlet *ngIf="!isLoading" />
+  </main>
 </div>

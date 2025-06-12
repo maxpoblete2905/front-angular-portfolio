@@ -1,15 +1,22 @@
 <div class="min-h-screen bg-gray-600 p-6 text-white">
   <div class="mx-auto max-w-7xl">
-
     <!-- Error -->
-    <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-800/30 text-red-300 rounded-lg border border-red-500">
-      {{ errorMessage }}
-      <button (click)="loadProjects()" class="ml-3 text-blue-400 underline">Reintentar</button>
+    <div
+      *ngIf="errorMessage"
+      class="mb-6 p-4 bg-red-800/30 text-red-300 rounded-lg border border-red-500 flex justify-between items-center"
+    >
+      <span>{{ errorMessage }}</span>
+      <button (click)="loadProjects()" class="text-blue-400 underline ml-4">
+        Reintentar
+      </button>
     </div>
 
-    <!-- Loading skeleton -->
+    <!-- Loading Skeleton -->
     <div *ngIf="isLoading" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <div *ngFor="let item of [1,2,3,4,5,6]" class="bg-gray-800 rounded-2xl shadow-lg p-4 animate-pulse space-y-4">
+      <div
+        *ngFor="let item of [1, 2, 3, 4, 5, 6]"
+        class="bg-gray-800 rounded-2xl shadow-lg p-4 animate-pulse space-y-4"
+      >
         <div class="h-5 bg-gray-700 rounded w-3/4"></div>
         <div class="h-4 bg-gray-700 rounded w-1/2"></div>
         <div class="h-3 bg-gray-700 rounded w-full"></div>
@@ -17,24 +24,46 @@
     </div>
 
     <!-- Proyectos agrupados por compañía -->
-    <div *ngIf="!isLoading && groupedProjects" class="space-y-10">
+    <div *ngIf="!isLoading && groupedProjects" class="space-y-12">
       <div *ngFor="let company of groupedProjects | keyvalue">
-        <h2 class="text-2xl font-bold text-white border-b border-gray-400 pb-2 mb-4">
-          {{ company.key }}
-        </h2>
+        <header
+          class="flex items-center gap-4 mb-6 border-b border-gray-500 pb-3"
+        >
+          <div
+            class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center shadow-inner"
+          >
+            <img
+              [src]="defaultCompanyIcon"
+              alt="icono"
+              class="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+          <h2
+            class="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-blue-400"
+          >
+            {{ company.key }}
+          </h2>
+        </header>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div *ngFor="let project of company.value"
-            class="bg-gradient-to-br from-gray-700 to-gray-700 rounded-2xl shadow-lg overflow-hidden group relative transition-transform hover:-translate-y-1 hover:shadow-blue-500/20 duration-300">
-
-            <a [routerLink]="['/portfolio/project/', project.id]" class="absolute inset-0 z-10" aria-label="Ver proyecto"></a>
+          <div
+            *ngFor="let project of company.value"
+            class="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl shadow-lg overflow-hidden group relative transition-transform hover:-translate-y-1 hover:shadow-blue-500/20 duration-300"
+          >
+            <a
+              [routerLink]="['/portfolio/project/', project.id]"
+              class="absolute inset-0 z-10"
+              aria-label="Ver proyecto"
+            ></a>
 
             <div class="p-5 space-y-2">
-              <h3 class="text-lg font-semibold text-blue-400 group-hover:underline transition">
+              <h3
+                class="text-lg font-semibold text-blue-400 group-hover:underline transition"
+              >
                 {{ project.title }}
               </h3>
-              <p class="text-sm text-gray-400">{{ project.position }}</p>
-              <p class="text-xs text-gray-500 italic">{{ project.client }}</p>
+              <p class="text-sm text-gray-300">{{ project.position }}</p>
+              <p class="text-xs text-gray-400 italic">{{ project.client }}</p>
             </div>
           </div>
         </div>
@@ -42,15 +71,29 @@
     </div>
 
     <!-- Estado vacío -->
-    <div *ngIf="!isLoading && !projects?.length" class="flex justify-center items-center h-60">
-      <div class="text-center space-y-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-600" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    <div
+      *ngIf="!isLoading && !projects?.length"
+      class="flex justify-center items-center h-60"
+    >
+      <div class="text-center space-y-3 text-gray-400">
+        <!-- Icono de archivo vacío -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-12 w-12 mx-auto text-gray-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 17v-2a4 4 0 014-4h4m-2 6h6m0 0V9a2 2 0 00-2-2h-6.586a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 008.586 4H6a2 2 0 00-2 2v12a2 2 0 002 2h6"
+          />
         </svg>
-        <h3 class="text-gray-400">No hay proyectos disponibles</h3>
+        <h3 class="text-lg font-medium">No hay proyectos disponibles</h3>
+        <p class="text-sm">Intenta agregar uno nuevo o revisar los filtros.</p>
       </div>
     </div>
-
   </div>
 </div>

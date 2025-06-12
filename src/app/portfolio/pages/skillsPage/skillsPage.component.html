@@ -1,71 +1,138 @@
-<div class="min-h-screen bg-gray-600 p-4">
-  <div class="mx-auto max-w-7xl">
-    <!-- Skeleton Loader -->
-    <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div *ngFor="let item of [1,2,3,4,5,6]"
-        class="bg-gray-700 rounded-lg shadow-md overflow-hidden h-48 animate-pulse">
-        <div class="p-3 flex flex-col items-center text-center h-full">
-          <!-- Icono skeleton -->
-          <div class="w-12 h-12 mb-3 bg-gray-600 rounded-lg shadow-md"></div>
-
-          <!-- Título skeleton -->
-          <div class="h-5 bg-gray-600 rounded w-3/4 mb-2"></div>
-
-          <!-- Descripción skeleton -->
-          <div class="w-full space-y-2 mb-3">
-            <div class="h-3 bg-gray-600 rounded w-5/6 mx-auto"></div>
-            <div class="h-3 bg-gray-600 rounded w-4/6 mx-auto"></div>
-          </div>
-
-          <!-- Tecnologías skeleton -->
-          <div class="flex flex-wrap justify-center gap-1 w-full mt-2">
-            <span class="w-16 h-6 bg-gray-600 rounded-full"></span>
-            <span class="w-14 h-6 bg-gray-600 rounded-full"></span>
-            <span class="w-12 h-6 bg-gray-600 rounded-full"></span>
+<div
+  class="min-h-screen bg-gray-600 p-6 flex justify-center"
+  role="main"
+  [attr.aria-label]="'Listado compacto y profesional de habilidades técnicas'"
+>
+  <div class="max-w-6xl w-full">
+    <!-- Loader Skeleton Compacto -->
+    <div
+      *ngIf="isLoading"
+      class="space-y-10"
+      aria-busy="true"
+      aria-live="polite"
+      [attr.aria-label]="'Cargando habilidades'"
+    >
+      <div *ngFor="let i of [1, 2, 3]" class="space-y-6">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 bg-gray-500 rounded-full animate-pulse"></div>
+          <div class="w-48 h-6 bg-gray-500 rounded animate-pulse"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            *ngFor="let j of [1, 2, 3]"
+            class="bg-gray-700/60 backdrop-blur-sm rounded-xl shadow-md animate-pulse p-4 h-32 flex flex-col justify-between"
+          >
+            <div
+              class="w-14 h-14 bg-gray-600 rounded-full shadow-inner mb-3"
+            ></div>
+            <div class="h-5 bg-gray-600 rounded w-3/4 mb-2"></div>
+            <div class="h-4 bg-gray-600 rounded w-full"></div>
+            <div class="flex gap-2 mt-3">
+              <span class="w-10 h-6 bg-gray-600 rounded-full"></span>
+              <span class="w-8 h-6 bg-gray-600 rounded-full"></span>
+              <span class="w-8 h-6 bg-gray-600 rounded-full"></span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Grid de habilidades -->
-    <div *ngIf="!isLoading && skills?.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div *ngFor="let skill of skills"
-        class="bg-gray-700 rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg group relative">
-
-        <!-- Contenido compacto -->
-        <div class="p-3 flex flex-col items-center text-center">
-          <!-- Icono con fondo -->
-          <div class="w-12 h-12 mb-3 bg-gray-600 p-2 rounded-lg shadow-md">
-            <img src="{{ skill.icon }}" alt="{{ skill.title }}" class="w-full h-full object-contain" />
+    <!-- Skills Compactas con estilo glassmorphism -->
+    <section
+      *ngIf="!isLoading && skillCategories?.length"
+      [attr.aria-label]="'Categorías de habilidades compactas y profesionales'"
+      class="space-y-12"
+    >
+      <article
+        *ngFor="let category of skillCategories"
+        class="mb-10"
+        tabindex="0"
+        [attr.aria-label]="category.name"
+      >
+        <header
+          class="flex items-center gap-4 mb-6 border-b border-gray-500 pb-2"
+        >
+          <div
+            class="w-10 h-10 rounded-full bg-gray-700/60 backdrop-blur-sm flex items-center justify-center shadow-md"
+          >
+            <img
+              [src]="category.icon"
+              alt="{{ category.name }} icono"
+              class="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110"
+            />
           </div>
+          <h2
+            class="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-blue-400"
+          >
+            {{ category.name }}
+          </h2>
+        </header>
 
-          <!-- Título y descripción -->
-          <h3 class="text-lg font-semibold mb-1 text-blue-400">
-            {{ skill.title }}
-          </h3>
-          <p class="text-sm text-gray-300 mb-3 line-clamp-2">
-            {{ skill.description }}
-          </p>
-
-          <!-- Tecnologías -->
-          <div class="flex flex-wrap justify-center gap-1 w-full">
-            <span *ngFor="let tech of skill.technologies"
-              class="flex items-center gap-1 text-xs text-blue-400 bg-gray-600 rounded-full px-2 py-1">
-              <img [src]="namefind(tech)" alt="Tecnología" class="w-4 h-4" />
-            </span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            *ngFor="let skill of category.skills"
+            class="bg-gray-700/60 backdrop-blur-sm rounded-xl shadow-md p-4 flex flex-col justify-between cursor-pointer hover:shadow-lg hover:scale-[1.03] transform transition-all duration-300"
+            tabindex="0"
+            role="region"
+            [attr.aria-label]="skill.title"
+          >
+            <div class="flex items-center gap-4 mb-3">
+              <div
+                class="w-14 h-14 bg-gray-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0 transition-transform duration-300 hover:scale-110"
+              >
+                <img
+                  [src]="skill.icon"
+                  alt="{{ skill.title }} icono"
+                  class="w-8 h-8 object-contain"
+                />
+              </div>
+              <div class="flex-1">
+                <h3
+                  class="text-lg font-semibold text-blue-400 truncate transition-colors duration-300 hover:text-blue-300"
+                >
+                  {{ skill.title }}
+                </h3>
+                <p
+                  class="text-gray-300 text-sm line-clamp-2 mt-1 leading-relaxed"
+                  [title]="skill.description"
+                >
+                  {{ skill.description }}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
-    <!-- Empty state -->
-    <div *ngIf="!isLoading && !skills?.length" class="text-center py-8">
-      <div class="inline-block p-4 bg-gray-700 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    <!-- Empty State -->
+    <div
+      *ngIf="!isLoading && !skillCategories?.length"
+      class="text-center py-12"
+      role="alert"
+      aria-live="assertive"
+    >
+      <div
+        class="inline-block p-6 bg-gray-700 rounded-xl shadow-md backdrop-blur-sm"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8 mx-auto text-blue-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          />
         </svg>
-        <h3 class="mt-2 text-sm font-medium text-white">No hay habilidades</h3>
+        <h3 class="mt-3 text-lg font-medium text-white">
+          No hay habilidades disponibles
+        </h3>
       </div>
     </div>
   </div>

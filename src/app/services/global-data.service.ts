@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Technology } from "../interfaces/technology.interface";
 import { Project } from "../interfaces";
-import { Skill } from "../interfaces/skill.interface";
+import { Skill, SkillCategory } from "../interfaces/skill.interface";
 import { Academic } from "../interfaces/academic.interface";
 import { Certification } from "../interfaces/certification.interface";
 import { Contact } from "../interfaces/contact.interface";
@@ -15,7 +15,7 @@ export class GlobalDataService {
   // Subjects para cada tipo de dato
   private technologyURLSource = new BehaviorSubject<Technology[]>([]);
   private projectsSource = new BehaviorSubject<Project[]>([]);
-  private skillsSource = new BehaviorSubject<Skill[]>([]);
+  private skillsSource = new BehaviorSubject<SkillCategory[]>([]);
   private personalInfoSource = new BehaviorSubject<PersonalInformation[]>([]);
   private academicsSource = new BehaviorSubject<Academic[]>([]);
   private certificationsSource = new BehaviorSubject<Certification[]>([]);
@@ -41,7 +41,7 @@ export class GlobalDataService {
     this.projectsSource.next(projects);
   }
 
-  setSkills(skills: Skill[]) {
+  setSkills(skills: SkillCategory[]) {
     this.skillsSource.next(skills);
   }
 
@@ -70,7 +70,7 @@ export class GlobalDataService {
     return this.projectsSource.getValue();
   }
 
-  getCurrentSkills(): Skill[] {
+  getCurrentSkills(): SkillCategory[] {
     return this.skillsSource.getValue();
   }
 
