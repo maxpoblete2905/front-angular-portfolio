@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-download-cv',
   templateUrl: './download-cv.component.html',
   styleUrl: './download-cv.component.css',
-  standalone: false
 })
 export class DownloadCvComponent {
 

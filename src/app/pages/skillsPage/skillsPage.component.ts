@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Subject, takeUntil, combineLatest } from 'rxjs'
-import { GlobalDataService } from '../../../services/global-data.service'
-import { SkillCategory, Technology } from '../../../interfaces'
+import { CommonModule } from '@angular/common'
+import { GlobalDataService } from '@services/global-data.service'
+import { SkillCategory, Technology } from '@interfaces/index'
 
 @Component({
   selector: 'portfolio-skills-page',
   templateUrl: './skillsPage.component.html',
   styleUrls: ['./skillsPage.component.css'],
-  standalone: false,
+  imports: [CommonModule]
 })
 export class SkillsPageComponent implements OnInit, OnDestroy {
   public skillCategories: SkillCategory[] = []

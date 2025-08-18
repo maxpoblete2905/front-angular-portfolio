@@ -1,30 +1,31 @@
-import { Component } from '@angular/core'
-import {
-  personalInformation,
-  PersonalInformation,
-} from './interfaces/personal.interfece'
-import { PersonalInformationService } from './services/portafolio/personal.service'
-import { AcademicService } from './services/portafolio/academic.service'
-import { GlobalDataService } from './services/global-data.service'
-import { ProjectService } from './services/portafolio/project.service'
-import { SkillService } from './services/portafolio/skills.service'
-import { TechnologyService } from './services/portafolio/technology.service'
-import { forkJoin, catchError, finalize, Observable, of } from 'rxjs'
-import { CertificationService } from './services/portafolio/certification.service'
-import { ContactService } from './services/portafolio/contact.service'
+import { Component, OnInit, signal } from '@angular/core';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { FirebaseTestService } from './services/firebase-test.service';
+import { GlobalDataService } from './services/global-data.service';
+import { TechnologyService } from './services/portafolio/technology.service';
+import { ProjectService } from './services/portafolio/project.service';
+import { SkillService } from './services/portafolio/skills.service';
+import { PersonalInformationService } from './services/portafolio/personal.service';
+import { forkJoin, catchError, finalize, Observable, of } from 'rxjs';
+import { PersonalInformation, personalInformation } from './interfaces/personal.interfece';
+import { AcademicService } from './services/portafolio/academic.service';
+import { CertificationService } from './services/portafolio/certification.service';
+import { ContactService } from './services/portafolio/contact.service';
+import { DownloadCvComponent } from './shared/components/download-cv/download-cv.component';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  standalone: false,
+  imports: [RouterOutlet, DownloadCvComponent, RouterModule ],
+  templateUrl: 'app.html',
 })
-export class AppComponent {
+export class App implements OnInit {
+  protected readonly title = signal('portfolio');
+  public connectionStatus = 'Probando...';
   public isLoading: boolean = true
   public errorMessage: string | null = null
   public errorMessages: string[] = []
   public personalInformation: PersonalInformation = personalInformation
-  isMobileMenuOpen = true
+  public isMobileMenuOpen = true
 
   constructor(
     private globalDataService: GlobalDataService,
@@ -34,8 +35,9 @@ export class AppComponent {
     private personalInformationService: PersonalInformationService,
     private academicService: AcademicService,
     private certificationService: CertificationService,
-    private contactService: ContactService
-  ) {}
+    private contactService: ContactService,
+    private firebaseTest: FirebaseTestService
+  ) { }
 
   ngOnInit(): void {
     this.loadAllData()
@@ -48,7 +50,7 @@ export class AppComponent {
     forkJoin({
       technologies: this.technologyService
         .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'icon'))),
+        .pipe(catchError((error) => this.handleError(error, 'icons'))),
       projects: this.projectService
         .getAll()
         .pipe(catchError((error) => this.handleError(error, 'projects'))),

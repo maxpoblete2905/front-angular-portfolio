@@ -28,7 +28,6 @@ const contactArray: ContactInformation[] = [
   selector: 'shared-contact-information',
   templateUrl: './contactInformation.component.html',
   styleUrls: ['./contactInformation.component.css'],
-  standalone: false
 })
 export class ContactInformationComponent implements OnInit {
   personalInformation: ContactInformation[] = contactArray;

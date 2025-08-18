@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { Project } from '../../../interfaces'
-import { GlobalDataService } from '../../../services/global-data.service'
 import { Subject, takeUntil } from 'rxjs'
+import { RouterModule } from '@angular/router'
+import { CommonModule } from '@angular/common'
+import { Project } from '@interfaces/index'
+import { GlobalDataService } from '@services/global-data.service'
 
 @Component({
   selector: 'portfolio-projects-page',
   templateUrl: './projectsPage.component.html',
   styleUrls: ['./projectsPage.component.css'],
-  standalone: false,
+  imports: [RouterModule, CommonModule]
 })
 export class ProjectsPageComponent implements OnInit, OnDestroy {
   public projects: Project[] = []
@@ -17,7 +19,7 @@ export class ProjectsPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>()
   defaultCompanyIcon = 'https://dummyimage.com/64x64/777/fff.png&text=?'
 
-  constructor(private globalDataService: GlobalDataService) {}
+  constructor(private globalDataService: GlobalDataService) { }
 
   ngOnInit(): void {
     this.loadProjects()

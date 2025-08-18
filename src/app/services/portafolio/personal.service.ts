@@ -1,16 +1,15 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { GenericService } from '../generic.service';
 import { PersonalInformation } from '../../interfaces/personal.interfece';
+import { PERSONAL_COLLECTION } from '../../core/tokens/collections';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class PersonalInformationService extends GenericService<PersonalInformation> {
-    constructor(
-        http: HttpClient,
-        @Inject('PERSONAL_API_URL') apiUrl: string
-    ) {
-        super(http, apiUrl);
-    }
+  constructor(
+    @Inject(PERSONAL_COLLECTION) collectionName: string
+  ) {
+    super(collectionName);
+  }
 }

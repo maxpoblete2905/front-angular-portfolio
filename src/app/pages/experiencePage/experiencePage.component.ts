@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PersonalInformation } from '../../../interfaces/personal.interfece';
-import { GlobalDataService } from '../../../services/global-data.service';
 import { Subject, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { PersonalInformation } from '@app/interfaces/personal.interfece';
+import { GlobalDataService } from '@app/services/global-data.service';
 
 @Component({
   selector: 'portfolio-experience-page',
   templateUrl: './experiencePage.component.html',
   styleUrls: ['./experiencePage.component.css'],
-  standalone: false
+  imports: [CommonModule]
 })
 export class ExperiencePageComponent implements OnInit, OnDestroy {
   public personalInformation: PersonalInformation = {
@@ -15,7 +16,8 @@ export class ExperiencePageComponent implements OnInit, OnDestroy {
     name: '',
     university_title: '',
     update: '',
-    descriptionPosition: ''
+    descriptionPosition: '',
+    id: ''
   };
   public isLoading = true;
   public errorMessage: string | null = null;

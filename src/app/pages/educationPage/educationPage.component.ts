@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { Academic } from '../../../interfaces';
-import { Certification } from '../../../interfaces/certification.interface';
-import { GlobalDataService } from '../../../services/global-data.service';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Subject, combineLatest, takeUntil } from 'rxjs';
+import { Academic } from '@app/interfaces';
+import { Certification } from '@app/interfaces/certification.interface';
+import { GlobalDataService } from '@app/services/global-data.service';
 
 @Component({
   selector: 'portfolio-education-page',
   templateUrl: './educationPage.component.html',
   styleUrls: ['./educationPage.component.css'],
   providers: [DatePipe],
-  standalone: false
+  imports: [CommonModule]
 })
 export class EducationPageComponent implements OnInit, OnDestroy {
   public educations: Academic[] = [];

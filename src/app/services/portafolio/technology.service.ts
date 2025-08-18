@@ -2,15 +2,15 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from '../generic.service';
 import { Technology } from '../../interfaces/technology.interface';
+import { TECHNOLOGY_COLLECTION } from '../../core/tokens/collections';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class TechnologyService extends GenericService<Technology> {
-    constructor(
-        http: HttpClient,
-        @Inject('TECHNOLOGY_API_URL') apiUrl: string
-    ) {
-        super(http, apiUrl);
-    }
+  constructor(
+    @Inject(TECHNOLOGY_COLLECTION) collectionName: string
+  ) {
+    super(collectionName);
+  }
 }

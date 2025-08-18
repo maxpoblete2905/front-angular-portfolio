@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Contact } from '../../../interfaces'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { finalize } from 'rxjs'
-import { ContactService } from '../../../services/portafolio/contact.service'
+import { CommonModule } from '@angular/common'
+import { Contact } from '@app/interfaces'
+import { ContactService } from '@app/services/portafolio/contact.service'
+import { ContactInformationComponent } from '@app/shared/components/contactInformation/contactInformation.component'
+
 
 @Component({
   selector: 'portfolio-contact-page',
   templateUrl: './contactPage.component.html',
   styleUrls: ['./contactPage.component.css'],
-  standalone: false,
+  imports: [CommonModule, ContactInformationComponent, ReactiveFormsModule]
 })
 export class ContactPageComponent implements OnInit {
   public messages: Contact[] = []
