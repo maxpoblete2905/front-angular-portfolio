@@ -1,30 +1,39 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Subject, combineLatest, takeUntil } from 'rxjs';
 import { Academic } from '@app/interfaces';
+import { GenericService } from '@app/services/generic.service';
 import { Certification } from '@app/interfaces/certification.interface';
-import { GlobalDataService } from '@app/services/global-data.service';
+import { Timestamp } from '@angular/fire/firestore'; // Importa Timestamp
 
 @Component({
   selector: 'portfolio-education-page',
   templateUrl: './educationPage.component.html',
   styleUrls: ['./educationPage.component.css'],
-  providers: [DatePipe],
-  imports: [CommonModule]
+  imports: [CommonModule],
+  providers: [
+    DatePipe,
+    {
+      provide: 'AcademicService',
+      useFactory: () => new GenericService<Academic>('academics')
+    },
+    {
+      provide: 'CertificationService',
+      useFactory: () => new GenericService<Certification>('certifications')
+    }
+  ]
 })
 export class EducationPageComponent implements OnInit, OnDestroy {
   public educations: Academic[] = [];
   public certifications: Certification[] = [];
   public isLoading = true;
-  public errorMessages: string[] = [];
+  public errorMessage: string = '';
   private destroy$ = new Subject<void>();
-  public errorMessage: string = ''
-
-
 
   constructor(
-    private globalDataService: GlobalDataService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    @Inject('AcademicService') private academicService: GenericService<Academic>,
+    @Inject('CertificationService') private certificationService: GenericService<Certification>
   ) { }
 
   ngOnInit(): void {
@@ -38,41 +47,92 @@ export class EducationPageComponent implements OnInit, OnDestroy {
 
   private loadEducationData(): void {
     this.isLoading = true;
-    this.errorMessages = [];
+    this.errorMessage = '';
 
     combineLatest([
-      this.globalDataService.academics$,
-      this.globalDataService.certifications$
-    ]).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: ([academics, certifications]) => {
-        this.educations = academics.sort((a, b) =>
-          new Date(b.period.end).getTime() - new Date(a.period.end).getTime()
-        );
-        this.certifications = certifications.sort((a, b) =>
-          new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime()
-        );
-        this.isLoading = false;
+      this.academicService.getAll(),
+      this.certificationService.getAll()
+    ]).pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: ([academics, certifications]) => {
+          // Convertir Timestamps a Dates
+          this.educations = this.convertAcademicTimestamps(academics);
+          this.certifications = this.convertCertificationTimestamps(certifications);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading education data:', error);
+          this.errorMessage = 'Error al cargar los datos de educación';
+          this.isLoading = false;
+        }
+      });
+  }
+
+  // Método para convertir Timestamps en objetos Academic
+  private convertAcademicTimestamps(academics: Academic[]): Academic[] {
+    return academics.map(academic => ({
+      ...academic,
+      period: {
+        ...academic.period,
+        start: this.convertToDate(academic.period.start),
+        end: this.convertToDate(academic.period.end)
       },
-      error: (error) => {
-        console.error('Error loading education data:', error);
-        this.errorMessages = [
-          'Error al cargar los datos académicos.',
-          'Error al cargar las certificaciones.'
-        ];
-        this.isLoading = false;
-      }
-    });
+      createdAt: this.convertToDate(academic.createdAt),
+      updatedAt: this.convertToDate(academic.updatedAt)
+    }));
+  }
+
+  // Método para convertir Timestamps en objetos Certification
+  private convertCertificationTimestamps(certifications: Certification[]): Certification[] {
+    return certifications.map(cert => ({
+      ...cert,
+      issueDate: this.convertToDate(cert.issueDate),
+      expirationDate: cert.expirationDate ? this.convertToDate(cert.expirationDate) : undefined,
+      createdAt: cert.createdAt ? this.convertToDate(cert.createdAt) : undefined,
+      updatedAt: cert.updatedAt ? this.convertToDate(cert.updatedAt) : undefined
+    }));
+  }
+
+  // Método genérico para convertir Timestamp a Date
+  private convertToDate(value: any): Date {
+    if (value instanceof Date) {
+      return value;
+    }
+
+    // Si es un objeto Timestamp de Firestore
+    if (value && typeof value === 'object' && 'seconds' in value && 'nanoseconds' in value) {
+      return new Date(value.seconds * 1000 + value.nanoseconds / 1000000);
+    }
+
+    // Si es un string de fecha
+    if (typeof value === 'string') {
+      return new Date(value);
+    }
+
+    // Si es un número (timestamp)
+    if (typeof value === 'number') {
+      return new Date(value);
+    }
+
+    console.warn('No se pudo convertir a Date:', value);
+    return new Date();
   }
 
   formatDate(date: Date): string {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return 'Fecha inválida';
+    }
     return this.datePipe.transform(date, 'MMM yyyy') || '';
   }
 
   getDuration(start: Date, end: Date, current?: boolean): string {
     const startDate = new Date(start);
     const endDate = current ? new Date() : new Date(end);
+
+    // Validar fechas
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return 'Duración no disponible';
+    }
 
     const years = endDate.getFullYear() - startDate.getFullYear();
     const months = endDate.getMonth() - startDate.getMonth();
@@ -93,6 +153,8 @@ export class EducationPageComponent implements OnInit, OnDestroy {
 
   isCertificationExpired(expirationDate?: Date): boolean {
     if (!expirationDate) return false;
-    return new Date(expirationDate) < new Date();
+    const expDate = new Date(expirationDate);
+    return !isNaN(expDate.getTime()) && expDate < new Date();
   }
+
 }

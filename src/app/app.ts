@@ -1,114 +1,92 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { FirebaseTestService } from './services/firebase-test.service';
-import { GlobalDataService } from './services/global-data.service';
-import { TechnologyService } from './services/portafolio/technology.service';
-import { ProjectService } from './services/portafolio/project.service';
-import { SkillService } from './services/portafolio/skills.service';
-import { PersonalInformationService } from './services/portafolio/personal.service';
-import { forkJoin, catchError, finalize, Observable, of } from 'rxjs';
-import { PersonalInformation, personalInformation } from './interfaces/personal.interfece';
-import { AcademicService } from './services/portafolio/academic.service';
-import { CertificationService } from './services/portafolio/certification.service';
-import { ContactService } from './services/portafolio/contact.service';
+import { PersonalInformation } from './interfaces/personal.interfece';
 import { DownloadCvComponent } from './shared/components/download-cv/download-cv.component';
+import { GenericService } from '@app/services/generic.service'; // Ajusta la ruta
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DownloadCvComponent, RouterModule ],
+  imports: [RouterOutlet, DownloadCvComponent, RouterModule],
   templateUrl: 'app.html',
+  providers: [
+    {
+      provide: GenericService,
+      useFactory: () => new GenericService<PersonalInformation>('personal-information')
+    }
+  ]
 })
 export class App implements OnInit {
-  protected readonly title = signal('portfolio');
+  protected readonly title = 'portfolio';
   public connectionStatus = 'Probando...';
-  public isLoading: boolean = true
-  public errorMessage: string | null = null
-  public errorMessages: string[] = []
-  public personalInformation: PersonalInformation = personalInformation
-  public isMobileMenuOpen = true
+  public isLoading: boolean = true;
+  public errorMessage: string | null = null;
+  public errorMessages: string[] = [];
+  public personalInformation!: PersonalInformation;
+  public isMobileMenuOpen = true;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private globalDataService: GlobalDataService,
-    private technologyService: TechnologyService,
-    private projectService: ProjectService,
-    private skillService: SkillService,
-    private personalInformationService: PersonalInformationService,
-    private academicService: AcademicService,
-    private certificationService: CertificationService,
-    private contactService: ContactService,
-    private firebaseTest: FirebaseTestService
+    @Inject(GenericService) private personalInfoService: GenericService<PersonalInformation>
   ) { }
 
   ngOnInit(): void {
-    this.loadAllData()
+    this.loadAllData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadAllData(): void {
-    this.isLoading = true
-    this.errorMessages = []
+    this.isLoading = true;
+    this.errorMessages = [];
 
-    forkJoin({
-      technologies: this.technologyService
-        .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'icons'))),
-      projects: this.projectService
-        .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'projects'))),
-      skills: this.skillService
-        .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'skills'))),
-      personalInfo: this.personalInformationService
-        .getAll()
-        .pipe(
-          catchError((error) => this.handleError(error, 'personal-information'))
-        ),
-      academics: this.academicService
-        .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'academics'))),
-      certifications: this.certificationService
-        .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'certifications'))),
-      contacts: this.contactService
-        .getAll()
-        .pipe(catchError((error) => this.handleError(error, 'contacts'))),
-    })
-      .pipe(finalize(() => (this.isLoading = false)))
+    // Cargar información personal desde Firestore
+    this.personalInfoService.getAll()
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (responses) => {
-          if (responses.technologies) {
-            this.globalDataService.setTechnologyURL(responses.technologies)
+        next: (data) => {
+          if (data && data.length > 0) {
+            // Tomar el primer documento de la colección
+            this.personalInformation = data[0];
+          } else {
+            this.errorMessages.push('No se encontró información personal');
           }
-          if (responses.projects) {
-            this.globalDataService.setProjects(responses.projects)
-          }
-          if (responses.skills) {
-            this.globalDataService.setSkills(responses.skills)
-          }
-          if (responses.personalInfo) {
-            this.globalDataService.setPersonalInformation(
-              responses.personalInfo
-            )
-            this.personalInformation = responses.personalInfo[0]
-          }
-          if (responses.academics) {
-            this.globalDataService.setAcademics(responses.academics)
-          }
-          if (responses.certifications) {
-            this.globalDataService.setCertifications(responses.certifications)
-          }
-          if (responses.contacts) {
-            this.globalDataService.setContacts(responses.contacts)
-          }
+          this.isLoading = false;
         },
-      })
+        error: (error) => {
+          console.error('Error loading personal information:', error);
+          this.errorMessages.push('Error al cargar la información personal');
+          this.isLoading = false;
+        }
+      });
   }
 
-  private handleError(error: any, context: string): Observable<null> {
-    console.error(`Error cargando ${context}:`, error)
-    this.errorMessages.push(`Error al cargar ${context}.`)
-    return of(null)
+  // Método para actualizar información personal
+  updatePersonalInformation(updatedInfo: PersonalInformation): void {
+    if (!updatedInfo.id) {
+      console.error('Cannot update without ID');
+      return;
+    }
+
+    this.personalInfoService.update(updatedInfo)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (result) => {
+          this.personalInformation = result;
+          console.log('Información personal actualizada correctamente');
+        },
+        error: (error) => {
+          console.error('Error updating personal information:', error);
+        }
+      });
   }
 
+  // Resto del código permanece igual...
   menuItems = [
     {
       label: 'Inicio',
@@ -135,7 +113,7 @@ export class App implements OnInit {
       link: '/portfolio/contact',
       icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
     },
-  ]
+  ];
 
   socialLinks = [
     {
@@ -148,5 +126,5 @@ export class App implements OnInit {
       url: 'https://www.linkedin.com/public-profile/settings?trk=d_flagship3_profile_self_view_public_profile',
       icon: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM6 4a2 2 0 11-4 0 2 2 0 014 0z',
     },
-  ]
+  ];
 }

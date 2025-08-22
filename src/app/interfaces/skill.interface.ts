@@ -1,18 +1,19 @@
 export interface SkillCategory {
-  id: string
-  name: string
-  icon: string
-  skills: Skill[]
+  id?: string;
+  name: string;
+  icon: string;
+  skills: Skill[];
 }
 
 export interface Skill {
-  icon: string
-  title: string
-  description: string
-  technologies: Technology[]
+  icon: string;
+  title: string;
+  description: string;
+  technologies: Technology[];
 }
 
 export interface Technology {
-  name: string
-  url: string
+  id?: string;
+  name: string;
+  url: string;
 }

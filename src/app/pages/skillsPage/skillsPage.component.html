@@ -1,139 +1,107 @@
-<div
-  class="min-h-screen bg-gray-600 p-6 flex justify-center"
-  role="main"
-  [attr.aria-label]="'Listado compacto y profesional de habilidades técnicas'"
->
-  <div class="max-w-6xl w-full">
-    <!-- Loader Skeleton Compacto -->
-    <div
-      *ngIf="isLoading"
-      class="space-y-10"
-      aria-busy="true"
-      aria-live="polite"
-      [attr.aria-label]="'Cargando habilidades'"
-    >
-      <div *ngFor="let i of [1, 2, 3]" class="space-y-6">
+<div class="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Loading State -->
+    @if (isLoading) {
+    <div class="space-y-8 animate-pulse">
+      @for (i of [1, 2, 3]; track i) {
+      <div class="space-y-6">
         <div class="flex items-center gap-3">
-          <div class="w-7 h-7 bg-gray-500 rounded-full animate-pulse"></div>
-          <div class="w-48 h-6 bg-gray-500 rounded animate-pulse"></div>
+          <div class="w-8 h-8 bg-gray-700 rounded-full"></div>
+          <div class="w-48 h-6 bg-gray-700 rounded"></div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div
-            *ngFor="let j of [1, 2, 3]"
-            class="bg-gray-700/60 backdrop-blur-sm rounded-xl shadow-md animate-pulse p-4 h-32 flex flex-col justify-between"
-          >
-            <div
-              class="w-14 h-14 bg-gray-600 rounded-full shadow-inner mb-3"
-            ></div>
-            <div class="h-5 bg-gray-600 rounded w-3/4 mb-2"></div>
-            <div class="h-4 bg-gray-600 rounded w-full"></div>
-            <div class="flex gap-2 mt-3">
-              <span class="w-10 h-6 bg-gray-600 rounded-full"></span>
-              <span class="w-8 h-6 bg-gray-600 rounded-full"></span>
-              <span class="w-8 h-6 bg-gray-600 rounded-full"></span>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (j of [1, 2, 3]; track j) {
+          <div class="bg-gray-800 rounded-lg p-5 h-48">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-gray-700 rounded-full"></div>
+              <div class="h-5 bg-gray-700 rounded w-3/4"></div>
+            </div>
+            <div class="h-3 bg-gray-700 rounded w-full mb-2"></div>
+            <div class="h-3 bg-gray-700 rounded w-5/6 mb-2"></div>
+            <div class="h-3 bg-gray-700 rounded w-2/3"></div>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="w-16 h-6 bg-gray-700 rounded-full"></span>
+              <span class="w-12 h-6 bg-gray-700 rounded-full"></span>
             </div>
           </div>
+          }
         </div>
       </div>
+      }
     </div>
+    }
 
-    <!-- Skills Compactas con estilo glassmorphism -->
-    <section
-      *ngIf="!isLoading && skillCategories?.length"
-      [attr.aria-label]="'Categorías de habilidades compactas y profesionales'"
-      class="space-y-12"
-    >
-      <article
-        *ngFor="let category of skillCategories"
-        class="mb-10"
-        tabindex="0"
-        [attr.aria-label]="category.name"
-      >
-        <header
-          class="flex items-center gap-4 mb-6 border-b border-gray-500 pb-2"
-        >
+    <!-- Skills Display -->
+    @if (!isLoading && skillCategories.length) {
+    <div class="
+    space-y-12
+    bottom-4
+    ">
+      <button class="bg-white" (click)="createdActive()">CREATE</button>
+      @if(create){
+      <app-skill-form />
+      }@else {
+      @for (category of skillCategories; track category) {
+      <section class="group">
+        <header class="flex items-center gap-4 mb-6">
           <div
-            class="w-10 h-10 rounded-full bg-gray-700/60 backdrop-blur-sm flex items-center justify-center shadow-md"
-          >
-            <img
-              [src]="category.icon"
-              alt="{{ category.name }} icono"
-              class="w-6 h-6 object-contain transition-transform duration-300 group-hover:scale-110"
-            />
+            class="w-10 h-10 rounded-full bg-gray-700/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
+            <img [src]="category.icon" [alt]="category.name + ' icon'" class="w-6 h-6 object-contain">
           </div>
-          <h2
-            class="text-2xl font-bold text-white tracking-tight transition-colors duration-300 group-hover:text-blue-400"
-          >
+          <h2 class="text-2xl font-bold text-white tracking-tight">
             {{ category.name }}
           </h2>
         </header>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div
-            *ngFor="let skill of category.skills"
-            class="bg-gray-700/60 backdrop-blur-sm rounded-xl shadow-md p-4 flex flex-col justify-between cursor-pointer hover:shadow-lg hover:scale-[1.03] transform transition-all duration-300"
-            tabindex="0"
-            role="region"
-            [attr.aria-label]="skill.title"
-          >
-            <div class="flex items-center gap-4 mb-3">
-              <div
-                class="w-14 h-14 bg-gray-600 rounded-full flex items-center justify-center shadow-inner flex-shrink-0 transition-transform duration-300 hover:scale-110"
-              >
-                <img
-                  [src]="skill.icon"
-                  alt="{{ skill.title }} icono"
-                  class="w-8 h-8 object-contain"
-                />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (skill of category.skills; track skill) {
+          <article
+            class="bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-700/50">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 rounded-full bg-gray-700/50 flex items-center justify-center flex-shrink-0">
+                <img [src]="skill.icon" [alt]="skill.title + ' icon'" class="w-7 h-7 object-contain">
               </div>
-              <div class="flex-1">
-                <h3
-                  class="text-lg font-semibold text-blue-400 truncate transition-colors duration-300 hover:text-blue-300"
-                >
-                  {{ skill.title }}
-                </h3>
-                <p
-                  class="text-gray-300 text-sm line-clamp-2 mt-1 leading-relaxed"
-                  [title]="skill.description"
-                >
-                  {{ skill.description }}
-                </p>
+              <div>
+                <h3 class="text-lg font-semibold text-blue-400">{{ skill.title }}</h3>
+                <p class="text-gray-300 text-sm mt-1">{{ skill.description }}</p>
               </div>
             </div>
-          </div>
+
+            <div class="mt-4 pt-4 border-t border-gray-700/50">
+              <h4 class="text-xs uppercase tracking-wider text-gray-400 mb-2">Technologies</h4>
+              <div class="flex flex-wrap gap-2">
+                @for (tech of skill.technologies; track tech) {
+                <span class="px-3 py-1 bg-gray-700/50 rounded-full text-xs text-gray-200 flex items-center gap-1">
+                  @if (getTechnologyByName(tech.name)) {
+                  <img [src]="getTechnologyByName(tech.name)" [alt]="tech + ' icon'" class="w-3 h-3 object-contain">
+                  }
+                  {{ tech }}
+                </span>
+                }
+              </div>
+            </div>
+          </article>
+          }
         </div>
-      </article>
-    </section>
+      </section>
+      }
+      }
+    </div>
+    }
 
     <!-- Empty State -->
-    <div
-      *ngIf="!isLoading && !skillCategories?.length"
-      class="text-center py-12"
-      role="alert"
-      aria-live="assertive"
-    >
-      <div
-        class="inline-block p-6 bg-gray-700 rounded-xl shadow-md backdrop-blur-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-8 w-8 mx-auto text-blue-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
+    @if (!isLoading && !skillCategories.length) {
+    <div class="text-center py-20">
+      <div class="inline-block p-8 bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-blue-400" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
-        <h3 class="mt-3 text-lg font-medium text-white">
-          No hay habilidades disponibles
-        </h3>
+        <h3 class="mt-4 text-lg font-medium text-white">No skills available</h3>
+        <p class="mt-2 text-gray-400">We couldn't find any skills to display</p>
       </div>
     </div>
+    }
   </div>
 </div>

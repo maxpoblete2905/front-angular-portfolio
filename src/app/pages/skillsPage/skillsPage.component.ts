@@ -1,78 +1,68 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
-import { Subject, takeUntil, combineLatest } from 'rxjs'
-import { CommonModule } from '@angular/common'
-import { GlobalDataService } from '@services/global-data.service'
-import { SkillCategory, Technology } from '@interfaces/index'
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { SkillCategory, Technology } from '@interfaces/index';
+import { SkillFormComponent } from '@app/shared/components/skill-form/skill-form.component';
+import { GenericService } from '@app/services/generic.service'; // Ajusta la ruta
 
 @Component({
   selector: 'portfolio-skills-page',
   templateUrl: './skillsPage.component.html',
   styleUrls: ['./skillsPage.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, SkillFormComponent],
+  standalone: true,
+  providers: [
+    {
+      provide: GenericService,
+      useFactory: () => new GenericService<SkillCategory>('skills-tech')
+    }
+  ]
 })
 export class SkillsPageComponent implements OnInit, OnDestroy {
-  public skillCategories: SkillCategory[] = []
-  public isLoading = true
-  private destroy$ = new Subject<void>()
-  public technologyURL: Technology[] = []
+  public skillCategories: SkillCategory[] = [];
+  public isLoading = true;
+  private destroy$ = new Subject<void>();
+  public technologyURL: Technology[] = [];
+  public create: boolean = false;
 
-  constructor(private globalDataService: GlobalDataService) {}
+  constructor(
+    @Inject(GenericService) private skillCategoryService: GenericService<SkillCategory>
+  ) { }
 
   ngOnInit(): void {
-    this.loadGlobalData()
+    this.loadGlobalData();
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadGlobalData(): void {
-    this.isLoading = true
+    this.isLoading = true;
 
-    combineLatest([
-      this.globalDataService.technologyURL$,
-      this.globalDataService.skills$,
-    ])
+    this.skillCategoryService.getAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: ([technologies, skillCategories]) => {
-          this.technologyURL = technologies
-          this.skillCategories = skillCategories
-          this.isLoading = false
-          console.log('Loading completed', {
-            skills: this.skillCategories,
-            technologies: this.technologyURL,
-            isLoading: this.isLoading,
-          })
+        next: (categories) => {
+          this.skillCategories = categories;
+          this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading data:', error)
-          this.isLoading = false
-        },
-        complete: () => {
-          this.isLoading = false
-        },
-      })
+          console.error('Error loading skill categories:', error);
+          this.isLoading = false;
+        }
+      });
   }
 
-  transform(value: string): string {
-    return value ? value.split('_').join(' ').toLowerCase() : ''
+  getTechnologyByName(techName: string): Technology | undefined {
+    if (!this.technologyURL?.length) return undefined;
+    return this.technologyURL.find(t =>
+      t.name.toLowerCase().includes(techName.toLowerCase())
+    );
   }
 
-  namefind(name: string): string {
-    if (!name || !this.technologyURL?.length) return ''
-
-    const cleanInputName = name.trim().toLowerCase()
-
-    const techItem = this.technologyURL.find((item) => {
-      const fileName = item.name.split('.')[0].trim().toLowerCase()
-      // Comparación más flexible
-      return (
-        fileName.includes(cleanInputName) || cleanInputName.includes(fileName)
-      )
-    })
-
-    return techItem?.url || ''
+  createdActive(): void {
+    this.create = !this.create;
   }
 }

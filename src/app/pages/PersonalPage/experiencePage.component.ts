@@ -1,31 +1,29 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { PersonalInformation } from '@app/interfaces/personal.interfece';
-import { GlobalDataService } from '@app/services/global-data.service';
+import { GenericService } from '@app/services/generic.service';
 
 @Component({
   selector: 'portfolio-experience-page',
   templateUrl: './experiencePage.component.html',
   styleUrls: ['./experiencePage.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule],
+  providers: [
+    {
+      provide: GenericService,
+      useFactory: () => new GenericService<PersonalInformation>('personal-information')
+    }
+  ]
 })
 export class ExperiencePageComponent implements OnInit, OnDestroy {
-  public personalInformation: PersonalInformation = {
-    description: '',
-    name: '',
-    university_title: '',
-    update: '',
-    descriptionPosition: '',
-    id: ''
-  };
+  public personalInformation!: PersonalInformation;
   public isLoading = true;
   public errorMessage: string | null = null;
   private destroy$ = new Subject<void>();
   particleStyles: any[] = [];
 
-  constructor(
-    private globalDataService: GlobalDataService
+  constructor(@Inject(GenericService) private personalInformationService: GenericService<PersonalInformation>
   ) { }
 
   ngOnInit(): void {
@@ -53,18 +51,15 @@ export class ExperiencePageComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.globalDataService.personalInfo$
+    this.personalInformationService.getAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (data: PersonalInformation[] | null) => {
-          if (data) {
-            this.personalInformation = data[0];
-          }
+        next: (personalInformation) => {
+          this.personalInformation = personalInformation[1];
           this.isLoading = false;
         },
-        error: (error: unknown) => {
-          console.error('Error loading personal information:', error);
-          this.errorMessage = 'Error al cargar la información personal. Por favor, inténtalo de nuevo más tarde.';
+        error: (error) => {
+          console.error('Error loading skill categories:', error);
           this.isLoading = false;
         }
       });

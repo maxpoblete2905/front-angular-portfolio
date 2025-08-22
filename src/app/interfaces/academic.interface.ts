@@ -1,13 +1,15 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Academic {
     id?: string;
     degree: string;
     institution: string;
     period: {
-        start: Date;
-        end: Date;
+        start: Date | Timestamp;
+        end: Date | Timestamp;
         current?: boolean;
     };
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Date | Timestamp;
+    updatedAt: Date | Timestamp;
 }

@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.container {
+  padding: 2rem;
+}
+
+mat-card {
+  background-color: rgba(22, 22, 24, 0.308);
+  border-radius: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.tech-chip {
+  margin: 0.25rem;
+}
+
+.add-skill-btn {
+  margin-top: 1rem;
+}
+
+.submit-btn {
+  margin-top: 2rem;
+}

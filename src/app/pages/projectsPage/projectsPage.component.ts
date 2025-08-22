@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Subject, takeUntil } from 'rxjs'
 import { RouterModule } from '@angular/router'
 import { CommonModule } from '@angular/common'
-import { Project } from '@interfaces/index'
-import { GlobalDataService } from '@services/global-data.service'
+import { Project } from '@app/interfaces'
 
 @Component({
   selector: 'portfolio-projects-page',
@@ -19,7 +18,7 @@ export class ProjectsPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>()
   defaultCompanyIcon = 'https://dummyimage.com/64x64/777/fff.png&text=?'
 
-  constructor(private globalDataService: GlobalDataService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.loadProjects()
@@ -34,23 +33,7 @@ export class ProjectsPageComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.errorMessage = null
 
-    this.globalDataService.projects$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (projects: Project[]) => {
-        this.projects = projects.filter((project) => project.state === true)
-        this.groupProjectsByCompany(this.projects)
-        this.isLoading = false
-        console.log('Projects loaded:', this.projects)
-      },
-      error: (error: any) => {
-        console.error('Error loading projects:', error)
-        this.errorMessage =
-          'Error al cargar los proyectos. Por favor, inténtalo de nuevo más tarde.'
-        this.isLoading = false
-      },
-      complete: () => {
-        this.isLoading = false
-      },
-    })
+
   }
 
   private groupProjectsByCompany(projects: Project[]): void {

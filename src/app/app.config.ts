@@ -5,7 +5,9 @@ import { initializeApp } from 'firebase/app';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
-import { ACADEMMIC_COLLECTION, CERTIFICATION_COLLECTION, CONTACT_COLLECTION, PERSONAL_COLLECTION, PROJECTS_COLLECTION, SKILLS_COLLECTION, TECHNOLOGY_COLLECTION } from './core/tokens/collections';
+import { Academic } from './interfaces';
+import { Certification } from './interfaces/certification.interface';
+import { GenericService } from './services/generic.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,11 +16,5 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    { provide: PROJECTS_COLLECTION, useValue: 'projects' }, // <-- Soluciona el error
-    { provide: SKILLS_COLLECTION, useValue: 'skills' },
-    { provide: ACADEMMIC_COLLECTION, useValue: 'academics' },
-    { provide: PERSONAL_COLLECTION, useValue: 'personal-information' },
-    { provide: CONTACT_COLLECTION, useValue: 'contacts' },
-    { provide: CERTIFICATION_COLLECTION, useValue: 'certifications' },
-    { provide: TECHNOLOGY_COLLECTION, useValue: 'technologies' },]
+  ]
 };

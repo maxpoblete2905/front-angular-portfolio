@@ -1,0 +1,45 @@
+/* Add smooth transitions and animations */
+article {
+  transition: all 0.3s ease;
+}
+
+/* Improve readability and visual hierarchy */
+h2,
+h3 {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Enhance the glassmorphism effect */
+.bg-gray-800\/80 {
+  background-color: rgba(31, 41, 55, 0.8);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+
+/* Hover effects */
+article:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Technology badges styling */
+.bg-gray-700\/50 {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+
+  .grid-cols-3,
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}

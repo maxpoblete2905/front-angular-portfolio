@@ -15,7 +15,7 @@ export const routes: Routes = [
       },
       {
         path: 'experience',
-        loadComponent: () => import('./pages/experiencePage/experiencePage.component').then(m => m.ExperiencePageComponent)
+        loadComponent: () => import('./pages/PersonalPage/experiencePage.component').then(m => m.ExperiencePageComponent)
       },
       {
         path: 'education',

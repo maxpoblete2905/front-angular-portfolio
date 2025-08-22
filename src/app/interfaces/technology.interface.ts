@@ -1,5 +1,5 @@
 export interface Technology {
-  id: string
+  id?: string
   name: string;
   url: string;
 }

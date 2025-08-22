@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 interface ContactInformation {
   value: string;
@@ -28,6 +30,7 @@ const contactArray: ContactInformation[] = [
   selector: 'shared-contact-information',
   templateUrl: './contactInformation.component.html',
   styleUrls: ['./contactInformation.component.css'],
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class ContactInformationComponent implements OnInit {
   personalInformation: ContactInformation[] = contactArray;

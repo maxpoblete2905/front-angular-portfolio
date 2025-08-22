@@ -5,8 +5,6 @@ import { Timestamp } from 'firebase/firestore';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Project, Technology } from '@interfaces/index';
-import { GlobalDataService } from '@services/global-data.service';
-import { ProjectService } from '@services/portafolio/project.service';
 
 @Component({
   selector: 'portfolio-project-page',
@@ -41,8 +39,6 @@ export class ProjectPageComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private globalDataService: GlobalDataService,
-    private projectService: ProjectService
   ) { }
 
   transform(value: string): string {
@@ -58,20 +54,7 @@ export class ProjectPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.globalDataService.technologyURL$.subscribe(urls => {
-      this.technologyURL = urls;
-    });
 
-    this.activatedRoute.params
-      .pipe(switchMap(({ id }) => this.projectService.getById(id)))
-      .subscribe((project) => {
-        if (!project) {
-          this.router.navigateByUrl('portfolio/projects');
-          return;
-        }
-        this.project = project;
-        this.isLoading = false;
-      });
   }
 
   nextImage(): void {
